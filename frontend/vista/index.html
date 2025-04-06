@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INICIO</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+
+#navbar {
+  overflow: hidden;
+  background-color:#6e131c;
+
+
+}
+
+#navbar a {
+  float: left;
+  display: flex;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: bold;
+
+}
+
+#navbar a:hover {
+  background: #6e272e;
+  color: white;
+
+ 
+
+ 
+}
+ .busqueda {
+    
+    width: 250px; 
+    display: inline-flex;
+    justify-content: space-between;
+   margin-left: 600px;
+   margin-top: 10px;
+
+
+ }
+
+h1{
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+
+<div id="navbar">
+  <a class="navbar-brand" href="#">
+    <img src="../logo.png" alt="Logo" style="width:40px;">
+  </a>
+
+  <a href="index.html">Inicio</a>
+  <a href="relacion_diaria.php">Diarios</a>
+  <a href="registar_contribuyente.php">Registrar Contribuyente</a> 
+  <a href="registar_clasificador.php">Registrar Clasificador</a>
+<div class="d-flex align-items-center"> 
+    <form action="lista_facturas_fecha.php" class="busqueda"  method="post">
+        <input class="form-control me-2" name="fecha">
+        <input class="btn btn-primary " type="submit" value="buscar">
+    </form>
+</div>
+</div>
+            <section>
+            <h1>LISTA CONTRIBUYENTES</h1>
+
+            <div class="container">
+                <label for="caja_busqueda">BUSCAR:</label>
+                <input class="buscar" type="text" name="caja_busqueda" id="caja_busqueda">
+            </div>
+
+            <div id="datos">
+                
+            </div>
+            </section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/buscar_datos.js"></script>
+
+</body>
+</html>

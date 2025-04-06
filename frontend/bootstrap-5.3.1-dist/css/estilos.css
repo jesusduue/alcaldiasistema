@@ -1,0 +1,228 @@
+/* style.css */
+/* body {
+      font-family: Arial, sans-serif;
+      padding: 0px;
+      margin: auto;
+    }
+
+    .formulario {
+      width: 950px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid darkred;
+    }
+
+    .fila {
+      display: flex;
+      justify-content: space-between;
+    }
+    .fila-cont {
+      display: inline-flex;
+      justify-content: space-between;
+      border-bottom: 1px solid darkred;
+      width: 900px;
+    }
+    .campo {
+      margin-bottom: 5px;
+    }
+
+    .campo.fecha-recibo {
+      order: -1; /* Para que aparezca al principio en la fila */
+  /*    
+    }
+      .FECHA{ 
+        border: none;
+        width: 100px;
+        text-align: center;
+      }
+
+    .campo.numero-factura {
+      order: 1; /* Para que aparezca al final en la fila 
+      border: none;
+      margin-left: 550px;
+    }
+    .factura{
+      border: none;
+      width: 100px;
+      text-align: center;
+    }
+
+    .clasificador-monto {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .campo.cod-inp{
+        width: 100px;
+        border: none;
+    }
+    .campo.cedula-rif{
+       border: none;
+    }
+    .campo.cedula{
+        width: 150px;
+        border: none;
+    }
+
+    .nombre{
+      width: 400px;
+      padding: 0px;
+      margin: auto;
+      border: none;
+    }
+
+  .menbrete{
+    text-align: center;
+    border: 1px solid crimson;
+  }*/
+
+  body {
+  font-family: "Courier New", Courier, monospace;
+  padding: 0;
+  margin: auto;
+}
+
+.formulario {
+  width: 950px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fila-cont {
+  display:inline-flex;
+  justify-content: initial;
+  border-bottom: 5px double darkred;
+  width: 900px;
+  padding-bottom:0px;
+}
+
+.campo {
+  margin: none;
+ }
+
+select, option {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid;
+        background: white;
+ }
+
+/*.campo:focus {
+ background: #f8f8ff;
+}
+*/
+.monto {
+ border: none;
+}
+
+ .monto:active {
+  margin-bottom: 0px;
+  background: #f8f8ff;
+  }
+
+
+
+.campo.fecha-recibo {
+  order: -1; /* Para que aparezca al principio en la fila */
+}
+
+.FECHA {
+  border: none;
+  width: 100px;
+  text-align: left;
+}
+
+.campo.numero-factura {
+  order: 1; /* Para que aparezca al final en la fila */
+  border: none;
+  margin-left: auto;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.factura {
+  border: none;
+  width: 100px;
+  text-align: center;
+  font-weight:bold;
+  font-size: 20px;
+}
+
+.clasificador-monto {
+  display: inline-flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.codigo, .cedula-rif, .nombre{
+  font-weight: bold;
+}
+
+.campo.cod-inp {
+  width: 80px;
+  border: none;
+}
+
+.campo.cedula {
+  width: 120px;
+  border: none;
+  padding: 0px 0px 0px 0px;
+  text-align: left;
+}
+
+.nombre {
+  width: 500px;
+  padding: 0;
+  border: none;
+}
+
+.menbrete {
+  margin-left: 50px;
+  text-align: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.descripcion{
+  width: auto;
+  padding: 5px;
+}
+
+.concepto{
+  width: 900px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 5px double darkred;
+
+}
+
+.total {
+  font-weight: bold;
+}
+
+@media print{
+  .oculto-impresion, .oculto-impresion *{
+    display: none !important;
+  }
+}
+
+.container{
+  display: inline-flex;
+  width: 650px;
+  height: auto;
+}
+
+.logo{
+width: 100px;
+height: auto;
+ 
+}
