@@ -122,28 +122,65 @@ h1{
 </div>
 
 			<div class="dib">
-			<form action="../../backend/controlador/contribuyente.php">
+			<form id="form-contribuyente">
 				<div>
 					<span>CEDULA/RIF</span>
-					<input type="text" name="cedula_rif" required>
+					<input type="text" name="cedula_rif" id="cedula_rif" required>
 				</div>
 				<div>
 					<span>RAZON SOCIAL</span>
-					<input type="text" name="razon_social" required>
+					<input type="text" name="razon_social" id="razon_social" required>
 				</div>
 				<div>
 					<span>ESTADO</span>
-					<Select name="estado_cont">
-						<option value="x">---</option>
+					<select name="estado_cont" id="estado_cont">
+						<option value="">---</option>
 						<option value="Activo">Activo</option>
 						<option value="Inactivo">Inactivo</option>
-					</Select>
+					</select>
 				</div>
 
+				<div id="mensaje" class="alert d-none mt-3" role="alert"></div>
+
 				<div>
-					<button type="submit" value="insertar" name="accion"> guardar</button>
+					<button type="submit"> guardar</button>
 				</div>
 
 		    </form></div>
+<script src="../js/apiClient.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const formulario = document.getElementById('form-contribuyente');
+		const mensaje = document.getElementById('mensaje');
+
+		function mostrarMensaje(tipo, texto) {
+			mensaje.className = `alert alert-${tipo} mt-3`;
+			mensaje.textContent = texto;
+			mensaje.classList.remove('d-none');
+		}
+
+		function limpiarMensaje() {
+			mensaje.classList.add('d-none');
+			mensaje.textContent = '';
+		}
+
+		formulario.addEventListener('submit', async (evento) => {
+			evento.preventDefault();
+			limpiarMensaje();
+			const formData = new FormData(formulario);
+			const payload = Object.fromEntries(formData.entries());
+			try {
+				const respuesta = await apiRequest('contribuyentes', 'store', {
+					method: 'POST',
+					body: payload,
+				});
+				formulario.reset();
+				mostrarMensaje('success', respuesta?.message || 'Contribuyente registrado correctamente.');
+			} catch (error) {
+				mostrarMensaje('danger', error.message || 'No fue posible registrar el contribuyente.');
+			}
+		});
+	});
+</script>
 </body>
 </html>

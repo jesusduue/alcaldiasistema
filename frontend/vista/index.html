@@ -68,8 +68,8 @@ h1{
   <a href="registar_contribuyente.php">Registrar Contribuyente</a> 
   <a href="registar_clasificador.php">Registrar Clasificador</a>
 <div class="d-flex align-items-center"> 
-    <form action="lista_facturas_fecha.php" class="busqueda"  method="post">
-        <input class="form-control me-2" name="fecha">
+    <form action="lista_facturas_fecha.php" class="busqueda"  method="get">
+        <input class="form-control me-2" name="fecha" type="date">
         <input class="btn btn-primary " type="submit" value="buscar">
     </form>
 </div>
@@ -86,7 +86,10 @@ h1{
                 
             </div>
             </section>
-<script src="../js/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/apiClient.js"></script>
+<script src="../js/license.js"></script>
 <script src="../js/buscar_datos.js"></script>
 
 </body>

@@ -1,92 +1,183 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-	<link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/estilos.css">
-	<title>FACTURA</title>
-	<style> /* estilos boton imprimir*/
-    .btn {
-        padding: 10px 20px;
-        background-color: #2c8091;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-         font-weight: bold;
-         text-transform: uppercase;
-        border-radius: 5px;
-    }
-    .btn:hover{
-    	background-color: #246a78;
-    	color: white;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/estilos.css">
+    <title>FACTURA</title>
+    <style>
+        .btn {
+            padding: 10px 20px;
+            background-color: #2c8091;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #246a78;
+            color: white;
+        }
+
+        .alert {
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 <body>
+    <div id="formulario" class="formulario">
+        <div class="container">
+            <img class="logo" src="../logo.png" alt="logo alcaldia">
+            <div class="menbrete">
+                <h6>REPUBLICA BOLIVARIANA DE VENEZUELA</h6><br>
+                <h6>ALCALDIA DEL MUNICIPIO GARCIA DE HEVIA</h6>
+                <h6> &nbsp; La Fria - Edo. Tachira  </h6><br>
+                <h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RIF:G-20001125-4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </h6>
+                <h6>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;DIRECCION DE HACIENDA &nbsp;&nbsp;&nbsp;&nbsp;</h6>
+            </div>
+        </div>
 
-	<?php 
+        <form id="form-anular">
+            <div class="fila">
+                <div class="fecha-recibo">FECHA:
+                    <input type="date" class="FECHA" name="fecha" id="fecha" required>
+                </div>
+                <div class="campo numero-factura">NUMERO FACTURA:
+                    <input type="text" class="factura" name="num_factura" id="num_factura" readonly>
+                </div>
+            </div>
 
-	    require('../../backend/clase/factura_clase_listar.php');
+            <div class="fila-cont">
+                <div class="codigo"> CODIGO:
+                    <input class="campo cod-inp" type="text" id="cod_contribuyente" readonly>
+                </div>
 
-		$obj_fact=new factura;
-		$obj_fact->asignar_valor();
-		$obj_fact->puntero=$obj_fact->listar_reimprimir_factura();
-		$factura=$obj_fact->extraer_dato();
+                <div class="cedula-rif">CEDULA/RIF:
+                    <input class="campo cedula" type="text" id="cedula_rif" readonly>
+                </div>
 
-?>
-			<div id="formulario" class="formulario">
-				<div class="container"> 
-					<img  class="logo" src="../logo.png" alt="">
-				<div class="menbrete ">
-				<h6>REPÚBLICA BOLIVARIANA DE VENEZUELA</h6><br>
-				<h6>ALCALDIA DEL MUNICIPIO GARCIA DE HEVIA</h6>
-				<h6> &nbsp; La Fría - Edo. Táchira  </h5><br>
-				<h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RIF:G-20001125-4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </h6>
-				<h6>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;DIRECCION DE HACIENDA &nbsp;&nbsp;&nbsp;&nbsp;</h6>
-				</div>
-					</div>
+                <div>
+                    <input type="text" class="nombre" id="razon_social" readonly>
+                </div>
+            </div>
 
-				<form id="myForm"  action="../../backend/clase/factura.update.php"  method="post">
-						
-						<div class="fila">
-						<div class="fecha-recibo">FECHA:
-						<input type="text" class="FECHA" name="fecha" value="<?php echo $factura['fecha']; ?>"></div>
-						<div class="campo numero-factura">N° FACTURA:
-						<input type="text" class="factura" name="num_factura" value="<?php echo  $factura['num_factura']; ?>" ></div>
-						</div>
+            <div class="descripcion">
+                <input type="text" class="concepto" name="concepto" id="concepto">
+            </div>
 
-						<div class="fila-cont">
-						<div class="codigo"> CODIGO:
-						<input class="campo cod-inp" type="text" name="cod_contribuyente" required value="<?php echo $factura['id_contribuyente']; ?>" readonly> </div>
+            <label>TOTAL CANCELADO:</label>
+            <input class="total" type="number" step="any" name="total_factura" id="total_factura" readonly><br>
 
-						<div class="cedula-rif">CEDULA/RIF:
-						<input class="campo cedula" type="text" name="cedula_rif" required value="<?php echo $factura['cedula_rif']; ?>" readonly> </div>
+            <label for="ESTADO_FACT">ESTADO:</label>
+            <input class="nulo" type="text" name="ESTADO_FACT" id="ESTADO_FACT" value="nulo">
 
-						<div >
-						<input type="text" class="nombre" name="razon_social" required value="<?php echo $factura['razon_social']; ?>" readonly> </div>
-					</div>
+            <div id="mensaje" class="alert d-none" role="alert"></div>
 
-					<div class="descripcion">
-						<input type="text" class="concepto" name="concepto" value="<?php echo $factura['concepto']; ?>">
-					</div>
+            <div>
+                <button type="submit" class="btn oculto-impresion">GUARDAR RECIBO</button>
+            </div>
+        </form>
+    </div>
 
-					<label >TOTAL CANCELADO:</label>
-        			<input  class="total" type="text" step="any" name="total_factura" readonly id="total" value="<?php echo $factura['total_factura']; ?>" ><br>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/apiClient.js"></script>
+    <script src="../js/license.js"></script>
+    <script>
+        const form = document.getElementById('form-anular');
+        const mensaje = document.getElementById('mensaje');
+        const params = new URLSearchParams(window.location.search);
+        const numFactura = params.get('num_factura');
 
-        			<label for="">ESTADO:</label>
-        			<input class="nulo" type="text"  name="ESTADO_FACT" value="<?php echo $factura['ESTADO_FACT']; ?>">
-        
-        	<div>
-        	<input class="btn oculto-impresion" type="submit" value="GUARDAR RECIBO"> 
+        function mostrarMensaje(tipo, texto) {
+            mensaje.className = `alert alert-${tipo}`;
+            mensaje.textContent = texto;
+            mensaje.classList.remove('d-none');
+        }
 
-        	</div>
-			</form>
+        function limpiarMensaje() {
+            mensaje.classList.add('d-none');
+            mensaje.textContent = '';
+        }
 
-	
-		</div>
+        async function cargarFactura() {
+            if (!numFactura) {
+                mostrarMensaje('warning', 'Debe indicar un numero de factura valido.');
+                form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
+                return;
+            }
 
+            try {
+                const respuesta = await apiRequest('facturas', 'show', {
+                    params: { num_factura: numFactura },
+                });
 
+                const factura = respuesta?.data;
+                if (!factura) {
+                    throw new Error('Factura no encontrada.');
+                }
+
+                document.getElementById('fecha').value = factura.fecha;
+                document.getElementById('num_factura').value = factura.num_factura;
+                document.getElementById('cod_contribuyente').value = factura.cod_contribuyente;
+                document.getElementById('cedula_rif').value = factura.cedula_rif;
+                document.getElementById('razon_social').value = factura.razon_social;
+                document.getElementById('concepto').value = factura.concepto ?? '';
+                document.getElementById('total_factura').value = factura.total_factura ?? 0;
+                document.getElementById('ESTADO_FACT').value = factura.ESTADO_FACT ?? 'nulo';
+            } catch (error) {
+                mostrarMensaje('danger', error.message || 'No fue posible obtener la factura.');
+                form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
+            }
+        }
+
+        form.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+            limpiarMensaje();
+
+            const licenciaActiva = await ensureLicenseActive();
+            if (!licenciaActiva) {
+                form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
+                return;
+            }
+
+            const payload = {
+                num_factura: document.getElementById('num_factura').value,
+                fecha: document.getElementById('fecha').value,
+                cod_contribuyente: document.getElementById('cod_contribuyente').value,
+                concepto: document.getElementById('concepto').value,
+                total_factura: document.getElementById('total_factura').value,
+                ESTADO_FACT: document.getElementById('ESTADO_FACT').value,
+            };
+
+            try {
+                const respuesta = await apiRequest('facturas', 'update', {
+                    method: 'POST',
+                    body: payload,
+                });
+
+                mostrarMensaje('success', respuesta?.message || 'Factura actualizada correctamente.');
+            } catch (error) {
+                if (error?.payload?.details?.code === 'LICENSE_EXPIRED') {
+                    await ensureLicenseActive({ force: true });
+                    form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
+                    return;
+                }
+                mostrarMensaje('danger', error.message || 'No fue posible actualizar la factura.');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const licenciaActiva = await ensureLicenseActive({ silent: false });
+            if (!licenciaActiva) {
+                form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
+                return;
+            }
+            cargarFactura();
+        });
+    </script>
 </body>
 </html>

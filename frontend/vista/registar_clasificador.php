@@ -147,27 +147,28 @@ h1{
   <a href="registar_contribuyente.php">Registrar Contribuyente</a> 
   <a href="registar_clasificador.php">Registrar Clasificador</a>
 <div class="d-flex align-items-center"> 
-    <form action="lista_facturas_fecha.php" class="busqueda"  method="post">
-        <input class="form-control me-2" name="fecha">
+    <form action="lista_facturas_fecha.php" class="busqueda"  method="get">
+        <input class="form-control me-2" name="fecha" type="date">
         <input class="btn btn-primary " type="submit" value="buscar">
     </form>
 </div>
 </div>
 
-			<form action="listar_rubros.php" class="busqueda"  method="post">
-      <input class="form-control me-2" name="fecha_det_recibo">
+			<form action="listar_rubros.php" class="busqueda"  method="get">
+      <input class="form-control me-2" name="fecha_det_recibo" type="date">
       <input class="btn btn-primary " type="submit" value="buscar">
     </form>
     
 	<div class="dib">
 
 
-		<form action="../../backend/controlador/clasificador.php">
+		<form id="form-clasificador">
 			
 			<div>
 				<span>AGREGAR CLASIFICADOR</span>
 				<input type="text" name="nombre" required>
-			</div>	
+			</div>
+			<div id="mensaje-clasificador" class="alert d-none mt-3" role="alert"></div>
 			<div>
 				<button type="submit" value="insertar" name="accion">AGREGAR</button>
 			</div>
@@ -177,5 +178,40 @@ h1{
 
 	</div>
 
+<script src="../js/apiClient.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const formulario = document.getElementById('form-clasificador');
+		const mensaje = document.getElementById('mensaje-clasificador');
+
+		function mostrarMensaje(tipo, texto) {
+			mensaje.className = `alert alert-${tipo} mt-3`;
+			mensaje.textContent = texto;
+			mensaje.classList.remove('d-none');
+		}
+
+		function limpiarMensaje() {
+			mensaje.classList.add('d-none');
+			mensaje.textContent = '';
+		}
+
+		formulario.addEventListener('submit', async (evento) => {
+			evento.preventDefault();
+			limpiarMensaje();
+			const formData = new FormData(formulario);
+			const payload = Object.fromEntries(formData.entries());
+			try {
+				const respuesta = await apiRequest('clasificadores', 'store', {
+					method: 'POST',
+					body: payload,
+				});
+				formulario.reset();
+				mostrarMensaje('success', respuesta?.message || 'Clasificador registrado correctamente.');
+			} catch (error) {
+				mostrarMensaje('danger', error.message || 'No fue posible registrar el clasificador.');
+			}
+		});
+	});
+</script>
 </body>
 </html>

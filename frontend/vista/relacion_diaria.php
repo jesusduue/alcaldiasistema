@@ -4,7 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>BUSCAR CONTRIBUYENTE</title>
 	<link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-	<script src="../js/jquery-3.2.1.min.js"></script>
+	
 	<style>h1{text-align: center;}
    
 @media print{
@@ -34,7 +34,8 @@
 				
 			</div>
 			</section>
-<script src="../js/jquery.min.js"></script>
+
+<script src="../js/apiClient.js"></script>
 <script src="../js/buscar_relacion.js"></script>
 </body>
 </html>
