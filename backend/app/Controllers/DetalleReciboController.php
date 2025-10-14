@@ -38,16 +38,11 @@ class DetalleReciboController
         try {
             $numFactura = Validator::requireInt(Request::input('num_factura'), 'num_factura');
 
-            $deleted = $this->repository->deleteByFactura($numFactura);
-
-            if (!$deleted) {
-                Response::error('No se encontró información del detalle para eliminar.', 404);
-                return;
-            }
+            $this->repository->deleteByFactura($numFactura);
 
             Response::json([
                 'success' => true,
-                'message' => 'Detalle de factura eliminado correctamente.',
+                'message' => 'Detalle de factura anulado correctamente.',
             ]);
         } catch (InvalidArgumentException $exception) {
             Response::error($exception->getMessage(), 422);
@@ -61,16 +56,11 @@ class DetalleReciboController
         try {
             $idDetalle = Validator::requireInt(Request::input('id_detalle_recibo'), 'id_detalle_recibo');
 
-            $deleted = $this->repository->deleteById($idDetalle);
-
-            if (!$deleted) {
-                Response::error('No se encontró información del detalle.', 404);
-                return;
-            }
+            $this->repository->deleteById($idDetalle);
 
             Response::json([
                 'success' => true,
-                'message' => 'Detalle eliminado correctamente.',
+                'message' => 'Detalle anulado correctamente.',
             ]);
         } catch (InvalidArgumentException $exception) {
             Response::error($exception->getMessage(), 422);
@@ -79,4 +69,3 @@ class DetalleReciboController
         }
     }
 }
-

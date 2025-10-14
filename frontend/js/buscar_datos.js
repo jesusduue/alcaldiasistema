@@ -14,16 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             const tabla = document.createElement('table');
-            tabla.className = 'container table table-bordered table-hover mt-3';
+            tabla.className = 'table table-hover align-middle mb-0';
             tabla.innerHTML = `
-                <thead class="head table-light">
+                <thead>
                     <tr>
-                        <td>CODIGO</td>
-                        <td>CEDULA/RIF</td>
-                        <td>RAZON SOCIAL</td>
-                        <td>ESTADO</td>
-                        <td colspan="2" class="text-center">PROCESOS</td>
-                        
+                        <th scope="col">Código</th>
+                        <th scope="col">Cédula/RIF</th>
+                        <th scope="col">Razón social</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="text-center" colspan="2">Procesos</th>
                     </tr>
                 </thead>
             `;
@@ -37,8 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.cedula_rif}</td>
                     <td>${item.razon_social}</td>
                     <td>${item.estado_cont ?? ''}</td>
-                    <td><a href="guardar_factura.php?id_contribuyente=${item.id_contribuyente}" class="btn btn-primary accion-licencia" data-action="generar" data-url="guardar_factura.php?id_contribuyente=${item.id_contribuyente}">GENERAR RECIBO</a></td>
-                    <td><a href="ver_pagos.php?id_contribuyente=${item.id_contribuyente}" class="btn btn-info">VER PAGOS</a></td>
+                    <td class="text-center">
+                        <a href="guardar_factura.php?id_contribuyente=${item.id_contribuyente}" class="btn btn-sm btn-app-primary accion-licencia" data-action="generar" data-url="guardar_factura.php?id_contribuyente=${item.id_contribuyente}">
+                            <i class="bi bi-receipt-cutoff me-1"></i>Generar recibo
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a href="ver_pagos.php?id_contribuyente=${item.id_contribuyente}" class="btn btn-sm btn-app-outline">
+                            <i class="bi bi-journal-text me-1"></i>Ver pagos
+                        </a>
+                    </td>
                 `;
                 tbody.appendChild(fila);
             });

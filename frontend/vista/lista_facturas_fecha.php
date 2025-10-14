@@ -3,47 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LISTA FACTURAS</title>
+    <title>Relacion diaria por contribuyente</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/estilos_pagos.css">
-    <style>
-        .titulo {
-            text-align: center;
-            font-weight: bold;
-        }
-        .footer {
-            text-align: right;
-            text-transform: uppercase;
-        }
-        .TXTO {
-            font-size: 11px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-    <div class="titulo"><span>RELACIÓN DE INGRESOS DIARIOS</span></div>
-    <div id="mensaje" class="alert d-none" role="alert"></div>
-    <table class="container">
-        <thead class="head">
-            <tr>
-                <td>N° FACTURA</td>
-                <td>FECHA</td>
-                <td>CEDULA/RIF</td>
-                <td>RAZON SOCIAL</td>
-                <td>CONCEPTO</td>
-                <td>MONTO CANCELADO</td>
-                <td>ESTADO</td>
-            </tr>
-        </thead>
-        <tbody id="tabla-facturas">
-            <tr>
-                <td colspan="7" class="text-center">Cargando información...</td>
-            </tr>
-        </tbody>
-        <tfoot id="tabla-resumen"></tfoot>
-    </table>
+   <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+                <img src="../logo.png" alt="Logo">
+                Alcaldia Sistema
+            </a>
+            <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="index.html">
+        
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+                <ul class="navbar-nav align-items-lg-center gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <header class="app-card mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <div>
+                <h1 class="app-section-title h3 mb-2">Relacion diaria por contribuyente</h1>
+                <p class="app-subtitle mb-0 oculto-impresion">Detalle de facturacion correspondiente a la fecha seleccionada. Puedes imprimir el reporte o volver para consultar otra fecha.</p>
+            </div>
+            <button class="btn btn-app-outline print-hide" type="button" onclick="window.print()">
+                <i class="bi bi-printer me-2"></i>Imprimir relacion
+            </button>
+        </header>
+
+        <section class="app-card">
+            <div id="mensaje" class="alert d-none" role="alert"></div>
+            <div class="table-responsive app-table">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">N° FACTURA</th>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">CEDULA/RIF</th>
+                            <th scope="col">RAZON SOCIAL</th>
+                            <th scope="col">CONCEPTO</th>
+                            <th scope="col">MONTO CANCELADO</th>
+                            <th scope="col">ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-facturas">
+                        <tr>
+                            <td colspan="7" class="text-center py-4">Cargando informacion...</td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="tabla-resumen"></tfoot>
+                </table>
+            </div>
+        </section>
+    </main>
 
     <script src="../js/apiClient.js"></script>
+    <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const fecha = params.get('fecha');
@@ -67,7 +92,7 @@
 
             if (!facturas.length) {
                 const fila = document.createElement('tr');
-                fila.innerHTML = `<td colspan="7" class="text-center">No hay registros.</td>`;
+                fila.innerHTML = `<td colspan="7" class="text-center py-4">No hay registros.</td>`;
                 cuerpoTabla.appendChild(fila);
                 resumenTabla.innerHTML = '';
                 return;
@@ -78,7 +103,6 @@
 
             facturas.forEach((factura) => {
                 const fila = document.createElement('tr');
-                fila.classList.add('TXTO');
                 fila.innerHTML = `
                     <td>${factura.num_factura}</td>
                     <td>${factura.fecha}</td>
@@ -103,17 +127,17 @@
 
             resumenTabla.innerHTML = `
                 <tr>
-                    <td colspan="5" class="footer">SUB-TOTAL:</td>
+                    <td colspan="5" class="text-end fw-semibold text-uppercase">Sub-total:</td>
                     <td>${totalSum.toFixed(2)}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="footer">TOTAL RECIBOS ANULADOS:</td>
+                    <td colspan="5" class="text-end fw-semibold text-uppercase">Total recibos anulados:</td>
                     <td>${anuladosSum.toFixed(2)}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="footer">TOTAL:</td>
+                    <td colspan="5" class="text-end fw-semibold text-uppercase">Total general:</td>
                     <td>${totalFinal.toFixed(2)}</td>
                     <td></td>
                 </tr>
@@ -136,7 +160,7 @@
                 renderizarTabla(respuesta?.data ?? []);
             } catch (error) {
                 renderizarTabla([]);
-                mostrarMensaje('danger', error.message || 'No fue posible obtener la información.');
+                mostrarMensaje('danger', error.message || 'No fue posible obtener la informacion.');
             }
         }
 

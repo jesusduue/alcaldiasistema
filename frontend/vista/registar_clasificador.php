@@ -1,217 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>REGISTRAR CLASIFICADOR</title>
+	<title>Registrar clasificador</title>
 	<link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-	<style type="text/css">
-
-		body {
-
-			font-family: Arial, sans-serif;
-
-			margin: 0;
-			padding: 0;
-			background-color: #f0f0f0;
-
-		}
-
-
-		.dib {
-
-			max-width: 400px;
-
-			margin: 100px auto;
-
-			padding: 20px;
-
-			border: 1px solid #cccccc;
-
-			border-radius: 5px;
-
-			background-color: #ffffff;
-
-		}
-
-
-		span {
-
-			display: block;
-
-			font-size: 14px;
-
-			font-weight: bold;
-
-			margin-bottom: 5px;
-
-		}
-
-
-		input[type="text"] {
-
-			width: 100%;
-
-			padding: 8px;
-
-			margin-bottom: 15px;
-
-			border: 1px solid #cccccc;
-
-			border-radius: 3px;
-
-		}
-
-
-		button[type="submit"] {
-
-			width: 100%;
-
-			padding: 10px;
-
-			background-color: #43a1a1;
-
-			border: none;
-
-			border-radius: 5px;
-
-			color:black;
-
-			font-size: 16px;
-
-			cursor: pointer;
-
-		}
-
-
-		button[type="submit"]:hover {
-
-			background-color: #004647;
-			color: white;
-
-		}
-
-#navbar {
-  overflow: hidden;
-  background-color:#6e131c;
-
-
-}
-
-#navbar a {
-  float: left;
-  display: flex;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: bold;
-
-}
-
-#navbar a:hover {
-  background: #6e272e;
-  color: white;
-
- 
-
- 
-}
- .busqueda {
-    
-    width: 250px; 
-    display: inline-flex;
-    justify-content: space-between;
-   margin-left: 600px;
-   margin-top: 10px;
-
-
- }
-
-h1{
-    text-align: center;
-}
-	
-	</style>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-	
-	<div id="navbar">
-  <a class="navbar-brand" href="#">
-    <img src="../logo.png" alt="Logo" style="width:40px;">
-  </a>
-
-  <a href="index.html">Inicio</a>
-  <a href="relacion_diaria.php">Diarios</a>
-  <a href="registar_contribuyente.php">Registrar Contribuyente</a> 
-  <a href="registar_clasificador.php">Registrar Clasificador</a>
-<div class="d-flex align-items-center"> 
-    <form action="lista_facturas_fecha.php" class="busqueda"  method="get">
-        <input class="form-control me-2" name="fecha" type="date">
-        <input class="btn btn-primary " type="submit" value="buscar">
-    </form>
-</div>
-</div>
-
-			<form action="listar_rubros.php" class="busqueda"  method="get">
-      <input class="form-control me-2" name="fecha_det_recibo" type="date">
-      <input class="btn btn-primary " type="submit" value="buscar">
-    </form>
-    
-	<div class="dib">
-
-
-		<form id="form-clasificador">
-			
-			<div>
-				<span>AGREGAR CLASIFICADOR</span>
-				<input type="text" name="nombre" required>
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+                <img src="../logo.png" alt="Logo">
+                Alcaldia Sistema
+            </a>
+			<button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-end" id="mainNav">
+				<ul class="navbar-nav align-items-lg-center gap-lg-3">
+					<li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+					<li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+					<li class="nav-item"><a class="nav-link active" href="registar_clasificador.php">Registrar clasificador</a></li>
+				</ul>
 			</div>
-			<div id="mensaje-clasificador" class="alert d-none mt-3" role="alert"></div>
-			<div>
-				<button type="submit" value="insertar" name="accion">AGREGAR</button>
+		</div>
+	</nav>
+
+	<main class="container py-5">
+		<section class="row g-4">
+			<div class="col-lg-6">
+				<div class="app-card h-100">
+					<header class="mb-4">
+						<h1 class="app-section-title h4 mb-2">Nuevo clasificador</h1>
+						<p class="app-subtitle mb-0">Identifica rubros tributarios para utilizarlos durante la generación de recibos.</p>
+					</header>
+					<form id="form-clasificador" class="needs-validation" novalidate>
+						<div class="mb-3">
+							<label for="nombre" class="form-label fw-semibold">Nombre del rubro</label>
+							<input type="text" name="nombre" id="nombre" class="form-control app-input" placeholder="Ej. Solvencia Municipal" required>
+						</div>
+						<div id="mensaje-clasificador" class="alert d-none mt-3" role="alert"></div>
+						<div class="d-grid mt-4">
+							<button type="submit" class="btn btn-app-primary" value="insertar" name="accion">
+								<i class="bi bi-plus-circle me-2"></i>Agregar clasificador
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
+			<div class="col-lg-6">
+				<div class="app-card h-100">
+					<header class="mb-4">
+						<h2 class="app-section-title h5 mb-2">Relacion por rubros</h2>
+						<p class="app-subtitle mb-0">Consulta la recaudacion agrupada por rubros en una fecha especifica.</p>
+					</header>
+					<form action="listar_rubros.php" method="get" class="needs-validation" novalidate>
+						<div class="mb-3">
+							<label for="fecha_det_recibo" class="form-label fw-semibold">Selecciona una fecha</label>
+							<input class="form-control app-input" name="fecha_det_recibo" id="fecha_det_recibo" type="date" required>
+						</div>
+						<div class="d-grid mt-4">
+							<button class="btn btn-app-outline" type="submit">
+								<i class="bi bi-funnel me-2"></i>Ver relacion por rubros
+							</button>
+						</div>
+					</form>
+					<p class="text-muted small mt-4 mb-0">
+						<i class="bi bi-info-circle me-1"></i>Tambien puedes generar relaciones diarias completas desde el menu superior en la seccion “Relaciones diarias”.
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
 
-		</form>
+	<script src="../js/apiClient.js"></script>
+	<script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const formulario = document.getElementById('form-clasificador');
+			const mensaje = document.getElementById('mensaje-clasificador');
 
-
-	</div>
-
-<script src="../js/apiClient.js"></script>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const formulario = document.getElementById('form-clasificador');
-		const mensaje = document.getElementById('mensaje-clasificador');
-
-		function mostrarMensaje(tipo, texto) {
-			mensaje.className = `alert alert-${tipo} mt-3`;
-			mensaje.textContent = texto;
-			mensaje.classList.remove('d-none');
-		}
-
-		function limpiarMensaje() {
-			mensaje.classList.add('d-none');
-			mensaje.textContent = '';
-		}
-
-		formulario.addEventListener('submit', async (evento) => {
-			evento.preventDefault();
-			limpiarMensaje();
-			const formData = new FormData(formulario);
-			const payload = Object.fromEntries(formData.entries());
-			try {
-				const respuesta = await apiRequest('clasificadores', 'store', {
-					method: 'POST',
-					body: payload,
-				});
-				formulario.reset();
-				mostrarMensaje('success', respuesta?.message || 'Clasificador registrado correctamente.');
-			} catch (error) {
-				mostrarMensaje('danger', error.message || 'No fue posible registrar el clasificador.');
+			function mostrarMensaje(tipo, texto) {
+				mensaje.className = `alert alert-${tipo} mt-3`;
+				mensaje.textContent = texto;
+				mensaje.classList.remove('d-none');
 			}
+
+			function limpiarMensaje() {
+				mensaje.classList.add('d-none');
+				mensaje.textContent = '';
+			}
+
+			formulario.addEventListener('submit', async (evento) => {
+				evento.preventDefault();
+				limpiarMensaje();
+				const formData = new FormData(formulario);
+				const payload = Object.fromEntries(formData.entries());
+				try {
+					const respuesta = await apiRequest('clasificadores', 'store', {
+						method: 'POST',
+						body: payload,
+					});
+					formulario.reset();
+					mostrarMensaje('success', respuesta?.message || 'Clasificador registrado correctamente.');
+				} catch (error) {
+					mostrarMensaje('danger', error.message || 'No fue posible registrar el clasificador.');
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </body>
 </html>

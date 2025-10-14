@@ -3,91 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubros</title>
-    <style>
-         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0px;
-
-        }
-        h1 {
-            text-align: center;
-            font-size: 20px;
-        }
-        .table-container {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-
-        }
-        table, th, td {
-            border-bottom: 1px solid #000;
-
-
-        }
-         .rubro {
-            text-align: center;
-            font-size: 12px;
-        }
-        th, td {
-            padding: 7.5px;
-        
-
-        }
-        th {
-            background-color: #fff;
-        }
-        .total {
-            font-weight: bold;
-        }
-        .date {
-            font-weight: bold;
-            font-size: 11px;
-        }
-        .nom_impuesto{
-        	font-size: 11px;
-        }
-        .tot_impuesto{
-        	font-size: 11px;
-        }
-
-    </style>
+    <title>Relacion por rubros</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Relación por Rubros</h1>
-        <div class="date">
-            Fecha: <span id="fecha-consulta">--</span>
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+                <img src="../logo.png" alt="Logo">
+                Alcaldia Sistema
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+                <ul class="navbar-nav align-items-lg-center gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="mensaje" class="alert" style="display:none;"></div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="rubro">Rubros</th>
-                        <th class="rubro">Total</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-rubros"></tbody>
-                <tfoot>
-                    <tr>
-                        <td class="total">Total General</td>
-                        <td class="total" id="total-general">0.00</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+    </nav>
+
+    <main class="container py-5">
+        <header class="app-card mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <div>
+                <h1 class="app-section-title h3 mb-2">Relacion por rubros</h1>
+                <p class="app-subtitle mb-0 oculto-impresion">Montos agrupados por rubros tributarios para la fecha seleccionada. Imprime el reporte o regresa para elegir otra fecha.</p>
+            </div>
+            <button class="btn btn-app-outline print-hide" type="button" onclick="window.print()">
+                <i class="bi bi-printer me-2"></i>Imprimir relacion
+            </button>
+        </header>
+
+        <section class="app-card">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 print-hide">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="app-pill">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        Fecha seleccionada: <span id="fecha-consulta">--</span>
+                    </span>
+                </div>
+                <a class="btn btn-app-outline" href="registar_clasificador.php#fecha_det_recibo">
+                    <i class="bi bi-arrow-left-circle me-2"></i>Elegir otra fecha
+                </a>
+            </div>
+
+            <div id="mensaje" class="alert d-none" role="alert"></div>
+
+            <div class="table-responsive app-table">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rubros</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-rubros"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-end fw-semibold text-uppercase">Total general</td>
+                            <td class="fw-semibold" id="total-general">0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    </main>
 
     <script src="../js/apiClient.js"></script>
+    <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const fecha = params.get('fecha_det_recibo');
@@ -134,15 +122,14 @@
         ];
 
         function mostrarMensaje(tipo, texto) {
-            mensaje.style.display = 'block';
             mensaje.className = `alert alert-${tipo}`;
             mensaje.textContent = texto;
+            mensaje.classList.remove('d-none');
         }
 
         function limpiarMensaje() {
-            mensaje.style.display = 'none';
+            mensaje.classList.add('d-none');
             mensaje.textContent = '';
-            mensaje.className = 'alert';
         }
 
         function agregarMonto(coleccion, nombre, monto) {
@@ -171,10 +158,10 @@
                 }
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
-                    <td class="nom_impuesto">${nombre}</td>
-                    <td class="tot_impuesto">${esNumero ? monto.toFixed(2) : '-'}</td>
+                    <td>${nombre}</td>
+                    <td>${esNumero ? monto.toFixed(2) : '-'}</td>
                 `;
-            tablaRubros.appendChild(fila);
+                tablaRubros.appendChild(fila);
             });
 
             totalGeneralEl.textContent = totalGeneral.toFixed(2);
@@ -182,7 +169,7 @@
 
         async function cargarRubros() {
             limpiarMensaje();
-            tablaRubros.innerHTML = `<tr><td colspan="2" class="text-center">Cargando información...</td></tr>`;
+            tablaRubros.innerHTML = `<tr><td colspan="2" class="text-center py-4">Cargando informacion...</td></tr>`;
             totalGeneralEl.textContent = '0.00';
 
             if (!fecha) {
@@ -212,7 +199,7 @@
 
                 renderizarTabla(agrupados);
             } catch (error) {
-                mostrarMensaje('danger', error.message || 'No fue posible obtener la información por rubros.');
+                mostrarMensaje('danger', error.message || 'No fue posible obtener la informacion por rubros.');
                 tablaRubros.innerHTML = '';
             }
         }

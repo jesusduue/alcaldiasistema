@@ -128,6 +128,7 @@ class FacturaController
                     'monto_impuesto_E' => $detalle['monto_impuesto_E'],
                     'impuesto_F' => $detalle['impuesto_F'],
                     'monto_impuesto_F' => $detalle['monto_impuesto_F'],
+                    'est_registro' => 'activo',
                 ]
             );
 
@@ -190,6 +191,12 @@ class FacturaController
                 return;
             }
 
+            if ($estado === 'nulo') {
+                $this->detalles->markByFactura($numFactura, 'inactivo');
+            } elseif ($estado !== 'eliminado') {
+                $this->detalles->markByFactura($numFactura, 'activo');
+            }
+
             Response::json([
                 'success' => true,
                 'message' => 'Factura actualizada correctamente.',
@@ -234,6 +241,7 @@ class FacturaController
                 'monto_impuesto_E' => $detalle['monto_impuesto_E'],
                 'impuesto_F' => $detalle['impuesto_F'],
                 'monto_impuesto_F' => $detalle['monto_impuesto_F'],
+                'est_registro' => 'activo',
             ]);
 
             if (!$updated) {

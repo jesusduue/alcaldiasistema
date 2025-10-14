@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const cajaBusqueda = document.getElementById('caja_busqueda');
 
     async function cargarFacturas(termino = '') {
-        contenedor.innerHTML = '<p class="text-center">Cargando...</p>';
+        contenedor.innerHTML = '<p class="text-center py-4 text-muted">Cargando...</p>';
         try {
             const respuesta = await apiRequest('facturas', 'list', {
                 params: { term: termino },
             });
             const items = respuesta?.data ?? [];
             if (!items.length) {
-                contenedor.innerHTML = "<p class='msj'>No hay datos</p>";
+                contenedor.innerHTML = "<p class='text-center py-4 text-muted'>No hay datos</p>";
                 return;
             }
 
@@ -18,17 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
             let anuladosSum = 0;
 
             const tabla = document.createElement('table');
-            tabla.className = 'container table table-bordered table-hover mt-3';
+            tabla.className = 'table table-hover align-middle mb-0';
             tabla.innerHTML = `
-                <thead class="head table-light">
-                    <tr class="head">
-                        <td>N° FACTURA</td>
-                        <td>FECHA</td>
-                        <td>CEDULA/RIF</td>
-                        <td>RAZON SOCIAL</td>
-                        <td>CONCEPTO</td>
-                        <td>MONTO CANCELADO</td>
-                        <td>ESTADO</td>
+                <thead>
+                    <tr>
+                        <th scope="col">N° FACTURA</th>
+                        <th scope="col">FECHA</th>
+                        <th scope="col">CEDULA/RIF</th>
+                        <th scope="col">RAZÓN SOCIAL</th>
+                        <th scope="col">CONCEPTO</th>
+                        <th scope="col">MONTO CANCELADO</th>
+                        <th scope="col">ESTADO</th>
                     </tr>
                 </thead>
             `;
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             items.forEach((factura) => {
                 const fila = document.createElement('tr');
-                fila.className = 'sal';
                 fila.innerHTML = `
                     <td>${factura.num_factura}</td>
                     <td>${factura.fecha}</td>
@@ -61,21 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const resumen = document.createElement('tr');
             resumen.innerHTML = `
-                <td colspan="5" class="footer">SUB-TOTAL:</td>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Sub-total:</td>
                 <td>${totalSum.toFixed(2)}</td>
                 <td></td>
             `;
 
             const anulados = document.createElement('tr');
             anulados.innerHTML = `
-                <td colspan="5" class="footer">TOTAL RECIBOS ANULADOS:</td>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Total recibos anulados:</td>
                 <td>${anuladosSum.toFixed(2)}</td>
                 <td></td>
             `;
 
             const total = document.createElement('tr');
             total.innerHTML = `
-                <td colspan="5" class="footer">TOTAL:</td>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Total:</td>
                 <td>${totalFinal.toFixed(2)}</td>
                 <td></td>
             `;
@@ -88,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contenedor.innerHTML = '';
             contenedor.appendChild(tabla);
         } catch (error) {
-            contenedor.innerHTML = `<p class='msj'>${error.message || 'Error al cargar las facturas.'}</p>`;
+            contenedor.innerHTML = `<p class='text-center text-danger py-4'>${error.message || 'Error al cargar las facturas.'}</p>`;
         }
     }
 

@@ -31,7 +31,8 @@ class DetalleReciboRepository
                 impuesto_E,
                 monto_impuesto_E,
                 impuesto_F,
-                monto_impuesto_F
+                monto_impuesto_F,
+                est_registro
             ) VALUES (
                 :fecha_det_recibo,
                 :cod_factura,
@@ -46,7 +47,8 @@ class DetalleReciboRepository
                 :impuesto_E,
                 :monto_impuesto_E,
                 :impuesto_F,
-                :monto_impuesto_F
+                :monto_impuesto_F,
+                :est_registro
             )'
         );
 
@@ -65,27 +67,48 @@ class DetalleReciboRepository
             ':monto_impuesto_E' => $data['monto_impuesto_E'],
             ':impuesto_F' => $data['impuesto_F'],
             ':monto_impuesto_F' => $data['monto_impuesto_F'],
+            ':est_registro' => $data['est_registro'] ?? 'activo',
         ]);
 
         return (int) $this->db->lastInsertId();
     }
 
-    public function deleteByFactura(int $numFactura): bool
+    public function markByFactura(int $numFactura, string $estado): bool
     {
         $stmt = $this->db->prepare(
-            'DELETE FROM detalle_recibo WHERE cod_factura = :cod_factura'
+            'UPDATE detalle_recibo
+             SET est_registro = :estado
+             WHERE cod_factura = :cod_factura'
         );
 
-        return $stmt->execute([':cod_factura' => $numFactura]);
+        return $stmt->execute([
+            ':estado' => $estado,
+            ':cod_factura' => $numFactura,
+        ]);
+    }
+
+    public function markById(int $idDetalle, string $estado): bool
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE detalle_recibo
+             SET est_registro = :estado
+             WHERE id_detalle_recibo = :id'
+        );
+
+        return $stmt->execute([
+            ':estado' => $estado,
+            ':id' => $idDetalle,
+        ]);
+    }
+
+    public function deleteByFactura(int $numFactura): bool
+    {
+        return $this->markByFactura($numFactura, 'inactivo');
     }
 
     public function deleteById(int $idDetalle): bool
     {
-        $stmt = $this->db->prepare(
-            'DELETE FROM detalle_recibo WHERE id_detalle_recibo = :id'
-        );
-
-        return $stmt->execute([':id' => $idDetalle]);
+        return $this->markById($idDetalle, 'inactivo');
     }
 
     public function listByFecha(string $fecha): array
@@ -115,6 +138,7 @@ class DetalleReciboRepository
             LEFT JOIN clasificador cE ON d.impuesto_E = cE.id_clasificador
             LEFT JOIN clasificador cF ON d.impuesto_F = cF.id_clasificador
             WHERE d.fecha_det_recibo = :fecha
+              AND d.est_registro = \'activo\'
             ORDER BY d.cod_factura ASC'
         );
 
@@ -123,4 +147,3 @@ class DetalleReciboRepository
         return $stmt->fetchAll();
     }
 }
-

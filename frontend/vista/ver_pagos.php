@@ -3,40 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAGOS</title>
+    <title>Pagos del contribuyente</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/estilos_pagos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="mb-4 text-center">PAGOS DEL CONTRIBUYENTE</h2>
-        <div id="estado-mensaje" class="alert d-none" role="alert"></div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <td>N° FACTURA</td>
-                        <td>FECHA</td>
-                        <td>CEDULA/RIF</td>
-                        <td>RAZON SOCIAL</td>
-                        <td>DESCRIPCION</td>
-                        <td>PAGO</td>
-                        <td>ESTADO</td>
-                        <td colspan="3">PROCESOS</td>
-                    </tr>
-                </thead>
-                <tbody id="tabla-pagos">
-                    <tr>
-                        <td colspan="10" class="text-center">Cargando información...</td>
-                    </tr>
-                </tbody>
-            </table>
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+                <img src="../logo.png" alt="Logo">
+                Alcaldia Sistema
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+                <ul class="navbar-nav align-items-lg-center gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <main class="container py-5">
+        <header class="app-card mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+            <div>
+                <h1 class="app-section-title h3 mb-2">Pagos del contribuyente</h1>
+                <p class="app-subtitle mb-0">Consulta el historico de facturas emitidas, reimprime recibos, modifica o anula segun el estado actual.</p>
+            </div>
+            <button class="btn btn-app-outline print-hide" type="button" onclick="window.print()">
+                <i class="bi bi-printer me-2"></i>Imprimir listado
+            </button>
+        </header>
+
+        <section class="app-card">
+            <div id="estado-mensaje" class="alert d-none" role="alert"></div>
+            <div class="table-responsive app-table">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">N° FACTURA</th>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">CEDULA/RIF</th>
+                            <th scope="col">RAZON SOCIAL</th>
+                            <th scope="col">DESCRIPCION</th>
+                            <th scope="col">MONTO</th>
+                            <th scope="col">ESTADO</th>
+                            <th scope="col" class="text-center oculto-impresion" colspan="3">PROCESOS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pagos">
+                        <tr>
+                            <td colspan="10" class="text-center py-4">Cargando informacion...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
+    <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const tablaPagos = document.getElementById('tabla-pagos');
         const estadoMensaje = document.getElementById('estado-mensaje');
@@ -63,9 +95,9 @@
                 <td>${factura.concepto ?? ''}</td>
                 <td>${factura.total_factura ?? ''}</td>
                 <td>${factura.ESTADO_FACT ?? ''}</td>
-                <td><a class="btn btn-primary" href="reimprimir_factura.php?num_factura=${factura.num_factura}">IMPRIMIR</a></td>
-                <td><button type="button" class="btn btn-primary btn-modificar" data-num="${factura.num_factura}">Modificar Factura</button></td>
-                <td><button type="button" class="btn btn-primary btn-anular" data-url="anular_factura.php?num_factura=${factura.num_factura}">ANULAR</button></td>
+                <td class="text-center"><a class="btn btn-sm btn-outline-secondary oculto-impresion" href="reimprimir_factura.php?num_factura=${factura.num_factura}"><i class="bi bi-printer"></i></a></td>
+                
+                <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-anular oculto-impresion" data-url="anular_factura.php?num_factura=${factura.num_factura}"><i class="bi bi-x-circle me-1"></i>Anular</button></td>
             `;
 
             return fila;
@@ -76,7 +108,7 @@
 
             if (!facturas.length) {
                 const fila = document.createElement('tr');
-                fila.innerHTML = `<td colspan="10" class="text-center">No hay pagos registrados para este contribuyente.</td>`;
+                fila.innerHTML = `<td colspan="10" class="text-center py-4">No hay pagos registrados para este contribuyente.</td>`;
                 tablaPagos.appendChild(fila);
                 return;
             }
@@ -93,7 +125,7 @@
 
             if (!idContribuyente) {
                 renderTabla([]);
-                mostrarMensaje('warning', 'Parámetro id_contribuyente no proporcionado.');
+                mostrarMensaje('warning', 'Parametro id_contribuyente no proporcionado.');
                 return;
             }
 

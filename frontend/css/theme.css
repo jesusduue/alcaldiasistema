@@ -1,0 +1,184 @@
+/* Custom dashboard theme overrides */
+:root {
+  --app-primary: #264653;
+  --app-secondary: #2a9d8f;
+  --app-accent: #e76f51;
+  --app-surface: #ffffff;
+  --app-background: #f4f6f8;
+  --app-text: #1f2933;
+}
+
+body {
+  background-color: var(--app-background);
+  color: var(--app-text);
+  font-family: "Inter", "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+.app-navbar {
+  background: linear-gradient(135deg, var(--app-primary), #1b2a34);
+  box-shadow: 0 4px 12px rgba(18, 52, 86, 0.25);
+}
+
+.app-navbar .navbar-brand img {
+  height: 42px;
+}
+
+.app-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus,
+.app-navbar .nav-link.active {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.app-hero {
+  background: linear-gradient(135deg, rgba(38, 70, 83, 0.9), rgba(42, 157, 143, 0.9));
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 40px rgba(38, 70, 83, 0.25);
+}
+
+.app-card {
+  background-color: var(--app-surface);
+  border: 1px solid rgba(38, 70, 83, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(15, 34, 51, 0.08);
+  padding: 2rem;
+}
+
+.app-section-title {
+  font-weight: 700;
+  color: var(--app-primary);
+}
+
+.app-subtitle {
+  color: rgba(31, 41, 51, 0.7);
+}
+
+.app-table {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(38, 70, 83, 0.08);
+  background-color: #ffffff;
+}
+
+.app-table thead {
+  background: var(--app-primary);
+  color: #ffffff;
+}
+
+.app-table th,
+.app-table td {
+  vertical-align: middle;
+}
+
+.btn-app-primary {
+  background: linear-gradient(135deg, var(--app-secondary), #52c7b5);
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  box-shadow: 0 10px 20px rgba(42, 157, 143, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-app-primary:hover,
+.btn-app-primary:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(42, 157, 143, 0.35);
+}
+
+.btn-app-outline {
+  border-radius: 999px;
+  border: 1px solid var(--app-secondary);
+  color: var(--app-secondary);
+  font-weight: 600;
+  padding: 0.6rem 1.6rem;
+}
+
+.btn-app-outline:hover,
+.btn-app-outline:focus {
+  background: var(--app-secondary);
+  color: #ffffff;
+}
+
+.app-input {
+  border-radius: 14px;
+  border: 1px solid rgba(38, 70, 83, 0.15);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-input:focus {
+  border-color: var(--app-secondary);
+  box-shadow: 0 0 0 0.25rem rgba(42, 157, 143, 0.25);
+}
+
+.app-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(42, 157, 143, 0.12);
+  color: var(--app-secondary);
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.app-footer {
+  color: rgba(31, 41, 51, 0.55);
+  font-size: 0.9rem;
+}
+
+.print-controls {
+  position: sticky;
+  top: 1rem;
+  z-index: 50;
+}
+
+@media (max-width: 992px) {
+  .app-hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .app-card {
+    padding: 1.5rem;
+  }
+
+  .app-navbar .nav-link {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+@media print {
+  body {
+    background-color: #ffffff;
+  }
+
+  .app-navbar,
+  .print-hide {
+    display: none !important;
+  }
+
+  .app-card,
+  .app-table {
+    box-shadow: none !important;
+    border: 1px solid #ccc;
+  }
+}
+
+@media print{
+  .oculto-impresion, .oculto-impresion *{
+    display: none !important;
+  }
+}

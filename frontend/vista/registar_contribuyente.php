@@ -1,140 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>REGISTAR CONTRIBUYENTE</title>
+	<title>Registrar contribuyente</title>
 	<link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-	<style type="text/css">
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    height: 100vh;
-}
-
-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 500px;
-}
-
-
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-button {
-    background-color: #43a1a1;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    width: 100%;
-    text-transform: uppercase;
-}
-
-button:hover {
-    background-color: #004647;
-	color:white ;}
-.dib {
-
-			max-width: 400px;
-
-			margin: 100px auto;
-
-			padding: 20px;
-
-			border: 1px solid #cccccc;
-
-			border-radius: 5px;
-
-			background-color: #ffffff;
-
-		}
-/*.....................................*/
-#navbar {
-  overflow: hidden;
-  background-color:#6e131c;
-
-
-}
-
-#navbar a {
-  float: left;
-  display: flex;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: bold;
-
-}
-
-#navbar a:hover {
-  background: #6e272e;
-  color: white;
-
- 
-
- 
-}
- .busqueda {
-    
-    width: 250px; 
-    display: inline-flex;
-    justify-content: space-between;
-   margin-left: 600px;
-   margin-top: 10px;
-
-
- }
-
-h1{
-    text-align: center;
-}
-
-	</style>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-	
-<div id="navbar">
-  <a class="navbar-brand" href="#">
-    <img src="../logo.png" alt="Logo" style="width:40px;">
-  </a>
+	   <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+                <img src="../logo.png" alt="Logo">
+                Alcaldia Sistema
+            </a>
+			<button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-end" id="mainNav">
+				<ul class="navbar-nav align-items-lg-center gap-lg-3">
+					<li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+					<li class="nav-item"><a class="nav-link active" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+					<li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-  <a href="index.html">Inicio</a>
-  <a href="relacion_diaria.php">Diarios</a>
-  <a href="registar_contribuyente.php">Registrar Contribuyente</a> 
-  <a href="registar_clasificador.php">Registrar Clasificador</a>
-</div>
+	<main class="container py-5">
+		<section class="app-card mx-auto" style="max-width: 600px;">
+			<header class="mb-4 text-center">
+				<h1 class="app-section-title h3 mb-2">Nuevo contribuyente</h1>
+				<p class="app-subtitle mb-0">Completa los datos y guarda para que esté disponible en los procesos de recaudacion.</p>
+			</header>
 
-			<div class="dib">
-			<form id="form-contribuyente">
-				<div>
-					<span>CEDULA/RIF</span>
-					<input type="text" name="cedula_rif" id="cedula_rif" required>
+			<form id="form-contribuyente" class="needs-validation" novalidate>
+				<div class="mb-3">
+					<label for="cedula_rif" class="form-label fw-semibold">Cedula/RIF</label>
+					<input type="text" class="form-control app-input" name="cedula_rif" id="cedula_rif" placeholder="Ej. V-12345678" required>
 				</div>
-				<div>
-					<span>RAZON SOCIAL</span>
-					<input type="text" name="razon_social" id="razon_social" required>
+				<div class="mb-3">
+					<label for="razon_social" class="form-label fw-semibold">Razon social</label>
+					<input type="text" class="form-control app-input" name="razon_social" id="razon_social" placeholder="Nombre de la empresa o contribuyente" required>
 				</div>
-				<div>
-					<span>ESTADO</span>
-					<select name="estado_cont" id="estado_cont">
-						<option value="">---</option>
+				<div class="mb-3">
+					<label for="estado_cont" class="form-label fw-semibold">Estado</label>
+					<select name="estado_cont" id="estado_cont" class="form-select app-input">
+						<option value="">Seleccionar estado</option>
 						<option value="Activo">Activo</option>
 						<option value="Inactivo">Inactivo</option>
 					</select>
@@ -142,45 +55,50 @@ h1{
 
 				<div id="mensaje" class="alert d-none mt-3" role="alert"></div>
 
-				<div>
-					<button type="submit"> guardar</button>
+				<div class="d-grid mt-4">
+					<button type="submit" class="btn btn-app-primary">
+						<i class="bi bi-save me-2"></i>Guardar contribuyente
+					</button>
 				</div>
+			</form>
+		</section>
+	</main>
 
-		    </form></div>
-<script src="../js/apiClient.js"></script>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const formulario = document.getElementById('form-contribuyente');
-		const mensaje = document.getElementById('mensaje');
+	<script src="../js/apiClient.js"></script>
+	<script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const formulario = document.getElementById('form-contribuyente');
+			const mensaje = document.getElementById('mensaje');
 
-		function mostrarMensaje(tipo, texto) {
-			mensaje.className = `alert alert-${tipo} mt-3`;
-			mensaje.textContent = texto;
-			mensaje.classList.remove('d-none');
-		}
-
-		function limpiarMensaje() {
-			mensaje.classList.add('d-none');
-			mensaje.textContent = '';
-		}
-
-		formulario.addEventListener('submit', async (evento) => {
-			evento.preventDefault();
-			limpiarMensaje();
-			const formData = new FormData(formulario);
-			const payload = Object.fromEntries(formData.entries());
-			try {
-				const respuesta = await apiRequest('contribuyentes', 'store', {
-					method: 'POST',
-					body: payload,
-				});
-				formulario.reset();
-				mostrarMensaje('success', respuesta?.message || 'Contribuyente registrado correctamente.');
-			} catch (error) {
-				mostrarMensaje('danger', error.message || 'No fue posible registrar el contribuyente.');
+			function mostrarMensaje(tipo, texto) {
+				mensaje.className = `alert alert-${tipo} mt-3`;
+				mensaje.textContent = texto;
+				mensaje.classList.remove('d-none');
 			}
+
+			function limpiarMensaje() {
+				mensaje.classList.add('d-none');
+				mensaje.textContent = '';
+			}
+
+			formulario.addEventListener('submit', async (evento) => {
+				evento.preventDefault();
+				limpiarMensaje();
+				const formData = new FormData(formulario);
+				const payload = Object.fromEntries(formData.entries());
+				try {
+					const respuesta = await apiRequest('contribuyentes', 'store', {
+						method: 'POST',
+						body: payload,
+					});
+					formulario.reset();
+					mostrarMensaje('success', respuesta?.message || 'Contribuyente registrado correctamente.');
+				} catch (error) {
+					mostrarMensaje('danger', error.message || 'No fue posible registrar el contribuyente.');
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </body>
 </html>

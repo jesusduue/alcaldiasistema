@@ -64,7 +64,8 @@ class FacturaRepository
                     impuesto_E,
                     monto_impuesto_E,
                     impuesto_F,
-                    monto_impuesto_F
+                    monto_impuesto_F,
+                    est_registro
                 ) VALUES (
                     :fecha_det_recibo,
                     :cod_factura,
@@ -79,7 +80,8 @@ class FacturaRepository
                     :impuesto_E,
                     :monto_impuesto_E,
                     :impuesto_F,
-                    :monto_impuesto_F
+                    :monto_impuesto_F,
+                    :est_registro
                 )'
             );
 
@@ -98,6 +100,7 @@ class FacturaRepository
                 ':monto_impuesto_E' => $detalleData['monto_impuesto_E'],
                 ':impuesto_F' => $detalleData['impuesto_F'],
                 ':monto_impuesto_F' => $detalleData['monto_impuesto_F'],
+                ':est_registro' => $detalleData['est_registro'] ?? 'activo',
             ]);
 
             $this->db->commit();
@@ -148,7 +151,8 @@ class FacturaRepository
                  impuesto_E = :impuesto_E,
                  monto_impuesto_E = :monto_impuesto_E,
                  impuesto_F = :impuesto_F,
-                 monto_impuesto_F = :monto_impuesto_F
+                 monto_impuesto_F = :monto_impuesto_F,
+                 est_registro = :est_registro
              WHERE cod_factura = :cod_factura'
         );
 
@@ -165,6 +169,7 @@ class FacturaRepository
             ':monto_impuesto_E' => $detalleData['monto_impuesto_E'],
             ':impuesto_F' => $detalleData['impuesto_F'],
             ':monto_impuesto_F' => $detalleData['monto_impuesto_F'],
+            ':est_registro' => $detalleData['est_registro'] ?? 'activo',
             ':cod_factura' => $numFactura,
         ]);
     }
@@ -220,9 +225,10 @@ class FacturaRepository
             LEFT JOIN clasificador cB ON d.impuesto_B = cB.id_clasificador
             LEFT JOIN clasificador cC ON d.impuesto_C = cC.id_clasificador
             LEFT JOIN clasificador cD ON d.impuesto_D = cD.id_clasificador
-            LEFT JOIN clasificador cE ON d.impuesto_E = cE.id_clasificador
-            LEFT JOIN clasificador cF ON d.impuesto_F = cF.id_clasificador
-            WHERE f.num_factura = :num_factura'
+              LEFT JOIN clasificador cE ON d.impuesto_E = cE.id_clasificador
+              LEFT JOIN clasificador cF ON d.impuesto_F = cF.id_clasificador
+              WHERE f.num_factura = :num_factura
+                AND d.est_registro = \'activo\''
         );
 
         $stmt->execute([':num_factura' => $numFactura]);
@@ -245,6 +251,7 @@ class FacturaRepository
                     f.ESTADO_FACT
                  FROM factura f
                  INNER JOIN contribuyente c ON f.cod_contribuyente = c.id_contribuyente
+                 WHERE f.ESTADO_FACT <> \'eliminado\'
                  ORDER BY f.num_factura ASC'
             );
 
@@ -263,12 +270,15 @@ class FacturaRepository
                 f.ESTADO_FACT
              FROM factura f
              INNER JOIN contribuyente c ON f.cod_contribuyente = c.id_contribuyente
-             WHERE f.fecha LIKE :term
-                OR c.cedula_rif LIKE :term
-                OR c.razon_social LIKE :term
-                OR f.concepto LIKE :term
-                OR f.total_factura LIKE :term
-                OR f.ESTADO_FACT LIKE :term
+             WHERE f.ESTADO_FACT <> \'eliminado\'
+               AND (
+                    f.fecha LIKE :term
+                    OR c.cedula_rif LIKE :term
+                    OR c.razon_social LIKE :term
+                    OR f.concepto LIKE :term
+                    OR f.total_factura LIKE :term
+                    OR f.ESTADO_FACT LIKE :term
+               )
              ORDER BY f.num_factura ASC'
         );
         $stmt->execute([':term' => $likeTerm]);
@@ -290,6 +300,7 @@ class FacturaRepository
              FROM factura f
              INNER JOIN contribuyente c ON f.cod_contribuyente = c.id_contribuyente
              WHERE f.fecha = :fecha
+               AND f.ESTADO_FACT <> \'eliminado\'
              ORDER BY f.num_factura ASC'
         );
         $stmt->execute([':fecha' => $fecha]);
@@ -311,6 +322,7 @@ class FacturaRepository
              FROM factura f
              INNER JOIN contribuyente c ON f.cod_contribuyente = c.id_contribuyente
              WHERE f.cod_contribuyente = :id
+               AND f.ESTADO_FACT <> \'eliminado\'
              ORDER BY f.fecha DESC, f.num_factura DESC'
         );
         $stmt->execute([':id' => $idContribuyente]);
@@ -333,17 +345,27 @@ class FacturaRepository
 
     public function delete(int $numFactura): bool
     {
-        $stmtDetalle = $this->db->prepare(
-            'DELETE FROM detalle_recibo WHERE cod_factura = :num_factura'
-        );
         $stmtFactura = $this->db->prepare(
-            'DELETE FROM factura WHERE num_factura = :num_factura'
+            'UPDATE factura
+             SET ESTADO_FACT = :estado
+             WHERE num_factura = :num_factura'
+        );
+        $stmtDetalle = $this->db->prepare(
+            'UPDATE detalle_recibo
+             SET est_registro = :estado
+             WHERE cod_factura = :num_factura'
         );
 
         try {
             $this->db->beginTransaction();
-            $stmtDetalle->execute([':num_factura' => $numFactura]);
-            $stmtFactura->execute([':num_factura' => $numFactura]);
+            $stmtFactura->execute([
+                ':estado' => 'eliminado',
+                ':num_factura' => $numFactura,
+            ]);
+            $stmtDetalle->execute([
+                ':estado' => 'inactivo',
+                ':num_factura' => $numFactura,
+            ]);
             $this->db->commit();
         } catch (PDOException $exception) {
             $this->db->rollBack();
