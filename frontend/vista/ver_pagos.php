@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3 oculto-impresion">
              <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
                 <img src="../logo.png" alt="Logo">
                 Alcaldia Sistema

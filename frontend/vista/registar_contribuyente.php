@@ -35,25 +35,63 @@
 				<p class="app-subtitle mb-0">Completa los datos y guarda para que esté disponible en los procesos de recaudacion.</p>
 			</header>
 
-			<form id="form-contribuyente" class="needs-validation" novalidate>
-				<div class="mb-3">
-					<label for="cedula_rif" class="form-label fw-semibold">Cedula/RIF</label>
-					<input type="text" class="form-control app-input" name="cedula_rif" id="cedula_rif" placeholder="Ej. V-12345678" required>
-				</div>
-				<div class="mb-3">
-					<label for="razon_social" class="form-label fw-semibold">Razon social</label>
-					<input type="text" class="form-control app-input" name="razon_social" id="razon_social" placeholder="Nombre de la empresa o contribuyente" required>
-				</div>
-				<div class="mb-3">
-					<label for="estado_cont" class="form-label fw-semibold">Estado</label>
-					<select name="estado_cont" id="estado_cont" class="form-select app-input">
-						<option value="">Seleccionar estado</option>
-						<option value="Activo">Activo</option>
-						<option value="Inactivo">Inactivo</option>
-					</select>
-				</div>
+            <form id="form-contribuyente" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="cedula_numero" class="form-label fw-semibold">Cedula/RIF</label>
+                    <div class="input-group">
+                        <select class="form-select app-input" id="cedula_tipo" style="max-width: 80px;">
+                            <option value="V-">V-</option>
+                            <option value="E-">E-</option>
+                            <option value="J-">J-</option>
+                            <option value="G-">G-</option>
+                        </select>
+                        <input type="text" class="form-control app-input" id="cedula_numero" placeholder="12345678" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="razon_social" class="form-label fw-semibold">Razon social</label>
+                    <input type="text" class="form-control app-input" name="razon_social" id="razon_social" placeholder="Nombre de la empresa o contribuyente" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telefono_numero" class="form-label fw-semibold">Telefono</label>
+                    <div class="input-group">
+                        <select class="form-select app-input" id="telefono_codigo" style="max-width: 100px;">
+                            <option value="0412">0412</option>
+                            <option value="0414">0414</option>
+                            <option value="0424">0424</option>
+                            <option value="0416">0416</option>
+                            <option value="0426">0426</option>
+                            <option value="0277">0277</option>
+                        </select>
+                        <input type="tel" class="form-control app-input" id="telefono_numero" placeholder="1234567" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email_usuario" class="form-label fw-semibold">Correo electronico</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control app-input" id="email_usuario" placeholder="usuario" required>
+                        <select class="form-select app-input" id="email_dominio" style="max-width: 150px;">
+                            <option value="@gmail.com">@gmail.com</option>
+                            <option value="@hotmail.com">@hotmail.com</option>
+                            <option value="@outlook.com">@outlook.com</option>
+                            <option value="@yahoo.com">@yahoo.com</option>
+                            <option value="@gmail.es">@gmail.es</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="direccion" class="form-label fw-semibold">Direccion fiscal</label>
+                    <textarea class="form-control app-input" name="direccion" id="direccion" rows="3" placeholder="Direccion completa del contribuyente" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="estado_cont" class="form-label fw-semibold">Estado</label>
+                    <select name="estado_cont" id="estado_cont" class="form-select app-input">
+                        <option value="A" selected>Activo</option>
+                        <option value="I">Inactivo</option>
+                    </select>
+                </div>
 
-				<div id="mensaje" class="alert d-none mt-3" role="alert"></div>
+                <div id="mensaje" class="alert d-none mt-3" role="alert"></div>
 
 				<div class="d-grid mt-4">
 					<button type="submit" class="btn btn-app-primary">
@@ -87,6 +125,23 @@
 				limpiarMensaje();
 				const formData = new FormData(formulario);
 				const payload = Object.fromEntries(formData.entries());
+
+                // Concatenar valores
+                const cedulaTipo = document.getElementById('cedula_tipo').value;
+                const cedulaNumero = document.getElementById('cedula_numero').value;
+                payload.cedula_rif = `${cedulaTipo}${cedulaNumero}`;
+
+                const telefonoCodigo = document.getElementById('telefono_codigo').value;
+                const telefonoNumero = document.getElementById('telefono_numero').value;
+                payload.telefono = `${telefonoCodigo}-${telefonoNumero}`;
+
+                const emailUsuario = document.getElementById('email_usuario').value;
+                const emailDominio = document.getElementById('email_dominio').value;
+                payload.email = `${emailUsuario}${emailDominio}`;
+
+                if (!payload.estado_cont) {
+                    payload.estado_cont = 'A';
+                }
 				try {
 					const respuesta = await apiRequest('contribuyentes', 'store', {
 						method: 'POST',

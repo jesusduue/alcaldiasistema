@@ -120,6 +120,7 @@
             'LEY DE CONTRATACIONES PUBLICAS',
             'OTROS INGRESOS EXTRAORDINARIOS'
         ];
+        const RUBROS_BASE = new Set(TODOS_IMPUESTOS.map((nombre) => nombre.toUpperCase()));
 
         function mostrarMensaje(tipo, texto) {
             mensaje.className = `alert alert-${tipo}`;
@@ -133,17 +134,18 @@
         }
 
         function agregarMonto(coleccion, nombre, monto) {
-            if (!nombre || nombre === 'null' || nombre === '-') {
+            if (!nombre) {
                 return;
             }
+            const clave = String(nombre).toUpperCase();
             const valor = parseFloat(monto);
             if (Number.isNaN(valor)) {
                 return;
             }
-            if (!coleccion[nombre]) {
-                coleccion[nombre] = 0;
+            if (!coleccion[clave]) {
+                coleccion[clave] = 0;
             }
-            coleccion[nombre] += valor;
+            coleccion[clave] += valor;
         }
 
         function renderizarTabla(agrupados) {
@@ -151,7 +153,8 @@
             let totalGeneral = 0;
 
             TODOS_IMPUESTOS.forEach((nombre) => {
-                const monto = agrupados[nombre];
+                const clave = nombre.toUpperCase();
+                const monto = agrupados[clave];
                 const esNumero = typeof monto === 'number' && !Number.isNaN(monto);
                 if (esNumero) {
                     totalGeneral += monto;
@@ -163,6 +166,22 @@
                 `;
                 tablaRubros.appendChild(fila);
             });
+
+            Object.entries(agrupados)
+                .filter(([nombre]) => !RUBROS_BASE.has(nombre))
+                .sort(([a], [b]) => a.localeCompare(b))
+                .forEach(([nombre, monto]) => {
+                    const esNumero = typeof monto === 'number' && !Number.isNaN(monto);
+                    if (esNumero) {
+                        totalGeneral += monto;
+                    }
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td>${nombre}</td>
+                        <td>${esNumero ? monto.toFixed(2) : '-'}</td>
+                    `;
+                    tablaRubros.appendChild(fila);
+                });
 
             totalGeneralEl.textContent = totalGeneral.toFixed(2);
         }
@@ -189,13 +208,12 @@
                 const agrupados = {};
 
                 detalles.forEach((item) => {
-                    agregarMonto(agrupados, item.nombre_impuesto_A, item.monto_impuesto_A);
-                    agregarMonto(agrupados, item.nombre_impuesto_B, item.monto_impuesto_B);
-                    agregarMonto(agrupados, item.nombre_impuesto_C, item.monto_impuesto_C);
-                    agregarMonto(agrupados, item.nombre_impuesto_D, item.monto_impuesto_D);
-                    agregarMonto(agrupados, item.nombre_impuesto_E, item.monto_impuesto_E);
-                    agregarMonto(agrupados, item.nombre_impuesto_F, item.monto_impuesto_F);
+                    agregarMonto(agrupados, item.nombre_impuesto, item.total_monto);
                 });
+
+                if (!detalles.length) {
+                    mostrarMensaje('info', 'No hay registros de rubros para la fecha indicada.');
+                }
 
                 renderizarTabla(agrupados);
             } catch (error) {

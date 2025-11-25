@@ -2,53 +2,51 @@
 
 namespace App\Controllers;
 
-use App\Repositories\ClasificadorRepository;
-use App\Support\Request;
-use App\Support\Response;
-use App\Support\Validator;
+use App\Core\Controller;
+use App\Core\Validator;
+use App\Models\TipoImpuestoModel;
+use App\Views\TipoImpuestoView;
 use InvalidArgumentException;
-use PDOException;
+use mysqli_sql_exception;
 
-class ClasificadorController
+class ClasificadorController extends Controller
 {
-    private ClasificadorRepository $repository;
+    private TipoImpuestoModel $impuestos;
 
     public function __construct()
     {
-        $this->repository = new ClasificadorRepository();
+        parent::__construct();
+        $this->impuestos = new TipoImpuestoModel();
     }
 
+    /** Lista los clasificadores (tipo_impuesto). */
     public function index(): void
     {
-        $items = $this->repository->all();
+        $items = $this->impuestos->all();
 
-        Response::json([
+        $this->json([
             'success' => true,
-            'data' => $items,
+            'data' => TipoImpuestoView::collection($items),
         ]);
     }
 
+    /** Registra un nuevo clasificador. */
     public function store(): void
     {
         try {
-            $nombre = Validator::optionalString(Request::input('nombre'));
+            $nombre = Validator::requireString($this->input('nombre'), 'nombre');
+            $descripcion = Validator::optionalString($this->input('descripcion'));
+            $id = $this->impuestos->create($nombre, $descripcion);
 
-            if (!$nombre) {
-                throw new InvalidArgumentException('El nombre del rubro es obligatorio.');
-            }
-
-            $id = $this->repository->create($nombre);
-
-            Response::json([
+            $this->json([
                 'success' => true,
                 'message' => 'Clasificador registrado correctamente.',
                 'id' => $id,
             ], 201);
         } catch (InvalidArgumentException $exception) {
-            Response::error($exception->getMessage(), 422);
-        } catch (PDOException $exception) {
-            Response::error('No fue posible registrar el clasificador.', 500, ['error' => $exception->getMessage()]);
+            $this->error($exception->getMessage(), 422);
+        } catch (mysqli_sql_exception $exception) {
+            $this->error('No fue posible registrar el clasificador.', 500, ['error' => $exception->getMessage()]);
         }
     }
 }
-

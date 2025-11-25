@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Support\LicenseGuard;
-use App\Support\Response;
+use App\Core\Response;
 
 class SystemController
 {
@@ -29,4 +29,3 @@ class SystemController
         ]);
     }
 }
-

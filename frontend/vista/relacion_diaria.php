@@ -20,6 +20,7 @@
 			<div class="collapse navbar-collapse justify-content-end" id="mainNav">
 				<ul class="navbar-nav align-items-lg-center gap-lg-3">
 					<li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="ingresos_diarios.php">Ingresos diarios</a></li>
 					<li class="nav-item"><a class="nav-link active" href="relacion_diaria.php">Relaciones diarias</a></li>
 					<li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
 					<li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
@@ -31,11 +32,11 @@
 	<main class="container py-5">
 		<section class="app-card mb-4">
 			<header class="mb-4 text-center text-md-start">
-				<h1 class="app-section-title h3 mb-2">Relaciones diarias</h1>
-				<p class="app-subtitle mb-0">Filtra las facturas por fecha, contribuyente o estado. Los resultados se actualizan mientras escribes para agilizar el control diario.</p>
+				<h1 class="app-section-title h3 mb-2">Relación Diaria</h1>
+				<p class="app-subtitle mb-0 oculto-impresion">Filtra las facturas por fecha, contribuyente o estado. Los resultados se actualizan mientras escribes para agilizar el control diario.</p>
 			</header>
 
-			<div class="row g-4 align-items-end mb-4 print-hide">
+			<div class="row g-4 align-items-end mb-4 print-hide oculto-impresion">
 				<div class="col-lg-6">
 					<label for="caja_busqueda" class="form-label text-uppercase text-muted small">Buscar por fecha, RIF, razón social o estado</label>
 					<div class="input-group">
@@ -46,7 +47,7 @@
 					</div>
 				</div>
 				<div class="col-lg-6 text-lg-end">
-					<p class="app-subtitle small mb-2">Accesos rápidos</p>
+					<p class="app-subtitle small mb-2 oculto-impresion">Accesos rápidos</p>
 					<div class="d-flex flex-wrap gap-2">
 						<a href="registar_clasificador.php" class="btn btn-sm btn-app-outline">
 							<i class="bi bi-clipboard-data me-1"></i>Relación por rubros

@@ -2,12 +2,15 @@
 
 require_once __DIR__ . '/../autoload.php';
 
+use App\Controllers\ActividadController;
 use App\Controllers\ClasificadorController;
 use App\Controllers\ContribuyenteController;
 use App\Controllers\DetalleReciboController;
 use App\Controllers\FacturaController;
+use App\Controllers\RolController;
 use App\Controllers\SystemController;
-use App\Support\Response;
+use App\Controllers\UsuarioController;
+use App\Core\Response;
 
 $entity = $_GET['entity'] ?? '';
 $action = $_GET['action'] ?? '';
@@ -43,6 +46,19 @@ $routes = [
         'by_fecha' => ['controller' => DetalleReciboController::class, 'method' => 'listByFecha', 'http' => ['get']],
         'delete_by_factura' => ['controller' => DetalleReciboController::class, 'method' => 'deleteByFactura', 'http' => ['post', 'delete']],
         'delete' => ['controller' => DetalleReciboController::class, 'method' => 'deleteById', 'http' => ['post', 'delete']],
+    ],
+    'roles' => [
+        'list' => ['controller' => RolController::class, 'method' => 'index', 'http' => ['get']],
+        'store' => ['controller' => RolController::class, 'method' => 'store', 'http' => ['post']],
+        'update' => ['controller' => RolController::class, 'method' => 'update', 'http' => ['post', 'put']],
+    ],
+    'usuarios' => [
+        'list' => ['controller' => UsuarioController::class, 'method' => 'index', 'http' => ['get']],
+        'store' => ['controller' => UsuarioController::class, 'method' => 'store', 'http' => ['post']],
+        'update' => ['controller' => UsuarioController::class, 'method' => 'update', 'http' => ['post', 'put']],
+    ],
+    'actividades' => [
+        'list' => ['controller' => ActividadController::class, 'method' => 'index', 'http' => ['get']],
     ],
 ];
 

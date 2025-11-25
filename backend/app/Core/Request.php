@@ -1,11 +1,17 @@
 <?php
 
-namespace App\Support;
+namespace App\Core;
 
+/**
+ * Normaliza el acceso a los datos recibidos por GET, POST o JSON.
+ */
 class Request
 {
     private static ?array $jsonPayload = null;
 
+    /**
+     * Obtiene un parámetro sin importar su origen.
+     */
     public static function input(string $key, mixed $default = null): mixed
     {
         if (isset($_POST[$key])) {
@@ -25,6 +31,9 @@ class Request
         return $default;
     }
 
+    /**
+     * Retorna el cuerpo JSON decodificado una única vez.
+     */
     public static function json(): array
     {
         if (self::$jsonPayload !== null) {

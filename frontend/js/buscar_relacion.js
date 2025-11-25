@@ -3,14 +3,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cajaBusqueda = document.getElementById('caja_busqueda');
 
     async function cargarFacturas(termino = '') {
-        contenedor.innerHTML = '<p class="text-center py-4 text-muted">Cargando...</p>';
+        contenedor.innerHTML = `<div class="loading-wrapper">
+                <div class="spinner-border spinner-vinotinto" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <div class="loading-text">Cargando contribuyentes...</div>
+            </div>`;
         try {
             const respuesta = await apiRequest('facturas', 'list', {
                 params: { term: termino },
             });
             const items = respuesta?.data ?? [];
             if (!items.length) {
-                contenedor.innerHTML = "<p class='text-center py-4 text-muted'>No hay datos</p>";
+                contenedor.innerHTML =`
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-search display-6 mb-3 d-block opacity-25"></i>
+                        No se encontraron contribuyentes registrados.
+                    </div>`;
                 return;
             }
 

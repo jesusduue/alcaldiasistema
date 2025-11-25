@@ -2,114 +2,161 @@
 
 namespace App\Controllers;
 
-use App\Repositories\ContribuyenteRepository;
-use App\Support\Request;
-use App\Support\Response;
-use App\Support\Validator;
+use App\Core\Controller;
+use App\Core\Validator;
+use App\Models\ContribuyenteModel;
+use App\Models\LogActividadModel;
+use App\Views\ContribuyenteView;
 use InvalidArgumentException;
-use PDOException;
+use mysqli_sql_exception;
 
-class ContribuyenteController
+class ContribuyenteController extends Controller
 {
-    private ContribuyenteRepository $repository;
+    private ContribuyenteModel $contribuyentes;
+    private LogActividadModel $logs;
 
     public function __construct()
     {
-        $this->repository = new ContribuyenteRepository();
+        parent::__construct();
+        $this->contribuyentes = new ContribuyenteModel();
+        $this->logs = new LogActividadModel();
     }
 
+    /** Lista contribuyentes opcionalmente filtrados. */
     public function index(): void
     {
-        $term = Request::input('term');
-        $items = $this->repository->search($term);
+        $term = Validator::optionalString($this->input('term'));
+        $items = $this->contribuyentes->search($term);
 
-        Response::json([
+        $this->json([
             'success' => true,
-            'data' => $items,
+            'data' => ContribuyenteView::collection($items),
         ]);
     }
 
+    /** Registra un nuevo contribuyente. */
     public function store(): void
     {
         try {
-            $cedula = Validator::optionalString(Request::input('cedula_rif'));
-            $razon = Validator::optionalString(Request::input('razon_social'));
-            $estado = Validator::optionalString(Request::input('estado_cont'));
+            $payload = $this->validatePayload();
 
-            if (!$cedula || !$razon) {
-                throw new InvalidArgumentException('CEDULA/RIF y RAZON SOCIAL son obligatorios.');
+            if ($this->contribuyentes->findByRif($payload['rif_con'])) {
+                throw new InvalidArgumentException('El RIF ya se encuentra registrado.');
             }
 
-            $id = $this->repository->create([
-                'cedula_rif' => $cedula,
-                'razon_social' => $razon,
-                'estado_cont' => $estado,
-            ]);
+            $id = $this->contribuyentes->create($payload);
 
-            Response::json([
+            $this->recordLog('CREAR', 'Registro de contribuyente', $id, $payload['rif_con']);
+
+            $this->json([
                 'success' => true,
                 'message' => 'Contribuyente registrado correctamente.',
                 'id' => $id,
             ], 201);
         } catch (InvalidArgumentException $exception) {
-            Response::error($exception->getMessage(), 422);
-        } catch (PDOException $exception) {
-            Response::error('No fue posible registrar el contribuyente.', 500, ['error' => $exception->getMessage()]);
+            $this->error($exception->getMessage(), 422);
+        } catch (mysqli_sql_exception $exception) {
+            $this->error('No fue posible registrar el contribuyente.', 500, ['error' => $exception->getMessage()]);
         }
     }
 
+    /** Actualiza un contribuyente existente. */
     public function update(): void
     {
         try {
-            $id = Validator::requireInt(Request::input('id_contribuyente'), 'id_contribuyente');
-            $cedula = Validator::optionalString(Request::input('cedula_rif'));
-            $razon = Validator::optionalString(Request::input('razon_social'));
-            $estado = Validator::optionalString(Request::input('estado_cont'));
+            $id = Validator::requireInt($this->input('id_contribuyente'), 'id_contribuyente');
+            $payload = $this->validatePayload();
 
-            if (!$cedula || !$razon) {
-                throw new InvalidArgumentException('CEDULA/RIF y RAZON SOCIAL son obligatorios.');
+            if ($this->contribuyentes->findByRif($payload['rif_con'], $id)) {
+                throw new InvalidArgumentException('Otro contribuyente utiliza el mismo RIF.');
             }
 
-            $updated = $this->repository->update($id, [
-                'cedula_rif' => $cedula,
-                'razon_social' => $razon,
-                'estado_cont' => $estado,
-            ]);
+            $updated = $this->contribuyentes->update($id, $payload);
 
             if (!$updated) {
-                Response::error('No se pudo actualizar el contribuyente.', 404);
+                $this->error('No se encontró el contribuyente indicado.', 404);
                 return;
             }
 
-            Response::json([
+            $this->recordLog('ACTUALIZAR', 'Actualización de contribuyente', $id, $payload['rif_con']);
+
+            $this->json([
                 'success' => true,
                 'message' => 'Contribuyente actualizado correctamente.',
             ]);
         } catch (InvalidArgumentException $exception) {
-            Response::error($exception->getMessage(), 422);
-        } catch (PDOException $exception) {
-            Response::error('No fue posible actualizar el contribuyente.', 500, ['error' => $exception->getMessage()]);
+            $this->error($exception->getMessage(), 422);
+        } catch (mysqli_sql_exception $exception) {
+            $this->error('No fue posible actualizar el contribuyente.', 500, ['error' => $exception->getMessage()]);
         }
     }
 
+    /** Muestra la ficha de un contribuyente. */
     public function show(): void
     {
         try {
-            $id = Validator::requireInt(Request::input('id_contribuyente'), 'id_contribuyente');
-            $contribuyente = $this->repository->find($id);
+            $id = Validator::requireInt($this->input('id_contribuyente'), 'id_contribuyente');
+            $contribuyente = $this->contribuyentes->find($id);
 
             if ($contribuyente === null) {
-                Response::error('Contribuyente no encontrado.', 404);
+                $this->error('Contribuyente no encontrado.', 404);
                 return;
             }
 
-            Response::json([
+            $this->json([
                 'success' => true,
-                'data' => $contribuyente,
+                'data' => ContribuyenteView::item($contribuyente),
             ]);
         } catch (InvalidArgumentException $exception) {
-            Response::error($exception->getMessage(), 422);
+            $this->error($exception->getMessage(), 422);
         }
     }
-}
 
+    private function validatePayload(): array
+    {
+        $estado = $this->normalizeEstado($this->input('estado_cont'));
+
+        return [
+            'nom_con' => Validator::requireString($this->input('razon_social'), 'razon_social'),
+            'rif_con' => Validator::requireString($this->input('cedula_rif'), 'cedula_rif'),
+            'tel_con' => Validator::requireString($this->input('telefono'), 'telefono'),
+            'ema_con' => Validator::requireEmail($this->input('email'), 'email'),
+            'dir_con' => Validator::requireString($this->input('direccion'), 'direccion'),
+            'fky_usu_registro' => $this->resolveUsuarioId(),
+            'est_registro' => $estado,
+        ];
+    }
+
+    private function normalizeEstado(mixed $estado): string
+    {
+        $valor = strtoupper(trim((string) ($estado ?? 'A')));
+
+        return $valor === 'I' ? 'I' : 'A';
+    }
+
+    private function resolveUsuarioId(): int
+    {
+        return (int) ($this->input('usuario_registro') ?? $this->input('id_usuario') ?? 1);
+    }
+
+    private function resolveUsuarioNombre(): string
+    {
+        return Validator::optionalString($this->input('usuario_nombre')) ?? 'sistema';
+    }
+
+    private function recordLog(string $accion, string $detalle, int $entityId, string $rif): void
+    {
+        $this->logs->record([
+            'fky_usu' => $this->resolveUsuarioId(),
+            'nom_usu' => $this->resolveUsuarioNombre(),
+            'modulo' => 'Contribuyentes',
+            'accion' => $accion,
+            'detalle' => $detalle,
+            'entidad_tipo' => 'contribuyente',
+            'entidad_id' => $entityId,
+            'metadata' => json_encode(['rif' => $rif], JSON_UNESCAPED_UNICODE),
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'cli',
+        ]);
+    }
+}

@@ -1,5 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,46 +9,40 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
-             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
-                <img src="../logo.png" alt="Logo">
-                Alcaldia Sistema
-            </a>
+        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+            <img src="../logo.png" alt="Logo">
+            Alcaldia Sistema
+        </a>
         <div class="container">
-       
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
                 <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link active" href="./index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="lista_facturas_fecha.php" method="get" class="d-flex flex-column flex-lg-row gap-2 ms-lg-4">
+                    <form action="lista_facturas_fecha.php" method="get"
+                            class="d-flex flex-column flex-lg-row gap-2 ms-lg-4">
                             <label class="text-white-50 small mb-0">Relacion por fecha</label>
                             <div class="input-group">
                                 <input class="form-control app-input" name="fecha" type="date" required>
                                 <button class="btn btn-app-outline" type="submit">Buscar</button>
                             </div>
-                        </form>
+                    </form>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-<!--     <main class="container py-5">
+    <!--     <main class="container py-5">
         <section class="app-hero mb-5">
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
@@ -67,35 +62,41 @@
             </div>
         </section>
  -->
-        <section class="app-card mb-5">
-            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-4">
-                <div>
-                    <h2 class="app-section-title h4 mb-1">Directorio de contribuyentes</h2>
-                    <p class="app-subtitle mb-0">Escribe al menos tres caracteres para iniciar la busqueda.</p>
-                </div>
-                <div class="w-100 w-md-auto">
-                    <label for="caja_busqueda" class="form-label text-uppercase text-muted small mb-1">Buscar contribuyente</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted"><i class="bi bi-search"></i></span>
-                        <input class="form-control app-input" type="text" name="caja_busqueda" id="caja_busqueda" placeholder="Cedula/RIF, razon social o estado">
-                    </div>
+    <section class="app-card mb-5">
+        <div
+            class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-4">
+            <div>
+                <h2 class="app-section-title h4 mb-1">Directorio de contribuyentes</h2>
+                <p class="app-subtitle mb-0">Escribe al menos tres caracteres para iniciar la busqueda.</p>
+            </div>
+            <div class="w-100 w-md-auto">
+                <label for="caja_busqueda" class="form-label text-uppercase text-muted small mb-1">Buscar
+                    contribuyente</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted"><i class="bi bi-search"></i></span>
+                    <input class="form-control app-input" type="text" name="caja_busqueda" id="caja_busqueda"
+                        placeholder="Cedula/RIF, razon social o estado">
                 </div>
             </div>
-            <div id="datos" class="table-responsive app-table"></div>
-        </section>
+        </div>
+        <div id="datos" class="table-responsive app-table"></div>
+    </section>
+    <footer class="app-footer text-center">
+        &copy; <span id="year"></span> Direccion de Hacienda · Municipio Garcia de Hevia
+    </footer>
 
-        <footer class="app-footer text-center">
-            &copy; <span id="year"></span> Direccion de Hacienda · Municipio Garcia de Hevia
-        </footer>
-    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
     <script src="../js/buscar_datos.js"></script>
     <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
+
 </html>
