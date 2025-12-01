@@ -37,6 +37,23 @@ class DetalleReciboController extends Controller
         }
     }
 
+    /** Lista los montos por impuesto en un rango de fechas. */
+    public function listByRange(): void
+    {
+        try {
+            $desde = Validator::requireDate($this->input('desde'), 'desde');
+            $hasta = Validator::requireDate($this->input('hasta'), 'hasta');
+            $items = $this->detalles->listByRange($desde, $hasta);
+
+            $this->json([
+                'success' => true,
+                'data' => $items,
+            ]);
+        } catch (InvalidArgumentException $exception) {
+            $this->error($exception->getMessage(), 422);
+        }
+    }
+
     /** Elimina lógicamente los detalles de una factura. */
     public function deleteByFactura(): void
     {

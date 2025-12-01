@@ -236,7 +236,7 @@
 
                 <!-- Total -->
                 <div class="factura-total">
-                    <span class="factura-total-label">TOTAL A PAGAR:</span>
+                    <span class="factura-total-label">TOTAL CANCELADO:</span>
                     <input type="text" class="form-control-plaintext factura-total-value w-auto text-end p-0" id="total_factura" readonly>
                 </div>
             </form>

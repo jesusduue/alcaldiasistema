@@ -230,8 +230,8 @@
                     </div>
 
                     <div class="mt-3">
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="agregarRenglon()">
-                            <i class="bi bi-plus-circle"></i> Agregar Renglón
+                        <button type="button" class="btn btn-app-outline" onclick="agregarRenglon()">
+                            <i class="bi bi-plus-circle"></i> Agregar Impuesto
                         </button>
                     </div>
                 </div>
@@ -447,6 +447,9 @@
                 const nom = document.getElementById('razon_social').value;
                 const idc = document.getElementById('cod_contribuyente_hidden').value;
                 
+                //Para imprimir
+                window.print();
+
                 form.reset();
                 document.getElementById('detalles-container').innerHTML = '';
                 agregarRenglon(); // Restaurar un renglón vacío
@@ -458,7 +461,7 @@
                 document.getElementById('fecha').value = fechaActual();
 
                 // Opcional: Imprimir
-                // window.print();
+               
             } catch (error) {
                 if (window.Swal && error?.payload?.details?.code === 'LICENSE_EXPIRED') {
                     const contact = error.payload?.details?.support_contact;

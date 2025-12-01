@@ -44,6 +44,9 @@ $routes = [
     ],
     'detalles' => [
         'by_fecha' => ['controller' => DetalleReciboController::class, 'method' => 'listByFecha', 'http' => ['get']],
+        // Rangos de fecha para rubros (compatible con camelCase y snake_case desde frontend)
+        'listByRange' => ['controller' => DetalleReciboController::class, 'method' => 'listByRange', 'http' => ['get']],
+        'by_range' => ['controller' => DetalleReciboController::class, 'method' => 'listByRange', 'http' => ['get']],
         'delete_by_factura' => ['controller' => DetalleReciboController::class, 'method' => 'deleteByFactura', 'http' => ['post', 'delete']],
         'delete' => ['controller' => DetalleReciboController::class, 'method' => 'deleteById', 'http' => ['post', 'delete']],
     ],

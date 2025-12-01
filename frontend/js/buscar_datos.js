@@ -1,6 +1,58 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     const contenedor = document.getElementById('datos');
     const cajaBusqueda = document.getElementById('caja_busqueda');
+    let paginationStylesLoaded = false;
+
+    function ensurePaginationStyles() {
+        if (paginationStylesLoaded) return;
+        const style = document.createElement('style');
+        style.textContent = `
+            /* Paleta vinotinto para paginacion DataTables / Bootstrap */
+            .dataTables_wrapper .dataTables_paginate .paginate_button,
+            .pagination .page-link {
+                color: #7f1d1d !important;
+                border-radius: 6px !important;
+                padding: 6px 10px !important;
+                margin: 0 2px !important;
+                border: 1px solid #e5e7eb !important;
+                background: #fff !important;
+                transition: all 0.15s ease;
+                box-shadow: none !important;
+                font-weight: 600;
+            }
+            .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+            .pagination .page-link:hover {
+                color: #7f1d1d !important;
+                background: #f5f0ef !important;
+                border-color: #e7d6d3 !important;
+            }
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+            .pagination .page-item.active .page-link {
+                color: #fff !important;
+                background: #7f1d1d !important;
+                border-color: #7f1d1d !important;
+                box-shadow: none !important;
+            }
+            .dataTables_wrapper .dataTables_paginate .paginate_button:active,
+            .pagination .page-link:active {
+                color: #fff !important;
+                background: #6b1616 !important;
+                border-color: #6b1616 !important;
+            }
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+            .pagination .page-item.disabled .page-link {
+                color: #9ca3af !important;
+                background: #f9fafb !important;
+                border-color: #e5e7eb !important;
+                cursor: not-allowed;
+                box-shadow: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+        paginationStylesLoaded = true;
+    }
 
     function normalizarEstado(estado) {
         if (!estado) {
@@ -89,6 +141,7 @@
             contenedor.appendChild(tabla);
 
             // Inicializar DataTables
+            ensurePaginationStyles();
             $(tabla).DataTable({
                 paging: true,
                 pageLength: 10,

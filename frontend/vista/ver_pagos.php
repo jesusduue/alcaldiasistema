@@ -39,6 +39,33 @@
             </button>
         </header>
 
+        <section class="row g-3 mb-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-white border rounded-3 p-3 h-100">
+                    <p class="text-uppercase text-muted small mb-1">Total neto</p>
+                    <h3 class="mb-0 text-primary" id="resumen-neto">-</h3>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-white border rounded-3 p-3 h-100">
+                    <p class="text-uppercase text-muted small mb-1">Monto bruto</p>
+                    <h3 class="mb-0" id="resumen-bruto">-</h3>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-white border rounded-3 p-3 h-100">
+                    <p class="text-uppercase text-muted small mb-1">Anulados</p>
+                    <h3 class="mb-0 text-danger" id="resumen-anulados">-</h3>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="bg-white border rounded-3 p-3 h-100">
+                    <p class="text-uppercase text-muted small mb-1">Recibos</p>
+                    <h3 class="mb-0" id="resumen-recibos">-</h3>
+                </div>
+            </div>
+        </section>
+
         <section class="app-card">
             <div id="estado-mensaje" class="alert d-none" role="alert"></div>
             <div class="table-responsive app-table">
@@ -72,6 +99,12 @@
     <script>
         const tablaPagos = document.getElementById('tabla-pagos');
         const estadoMensaje = document.getElementById('estado-mensaje');
+        const resumenBruto = document.getElementById('resumen-bruto');
+        const resumenAnulados = document.getElementById('resumen-anulados');
+        const resumenNeto = document.getElementById('resumen-neto');
+        const resumenRecibos = document.getElementById('resumen-recibos');
+
+        const numberFormat = new Intl.NumberFormat('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         function mostrarMensaje(tipo, mensaje) {
             estadoMensaje.className = `alert alert-${tipo}`;
@@ -82,6 +115,37 @@
         function limpiarMensaje() {
             estadoMensaje.classList.add('d-none');
             estadoMensaje.textContent = '';
+        }
+
+        function esAnulada(factura) {
+            const estadoPago = String(factura?.estado_pago ?? '').toUpperCase();
+            const estadoTexto = String(factura?.ESTADO_FACT ?? '').toUpperCase();
+            return estadoPago === 'N' || estadoTexto === 'NULO';
+        }
+
+        function setResumen(facturas) {
+            if (!facturas.length) {
+                resumenBruto.textContent = '-';
+                resumenAnulados.textContent = '-';
+                resumenNeto.textContent = '-';
+                resumenRecibos.textContent = '-';
+                return;
+            }
+
+            let bruto = 0;
+            let anulados = 0;
+            facturas.forEach((factura) => {
+                const monto = Number(factura.total_factura) || 0;
+                bruto += monto;
+                if (esAnulada(factura)) {
+                    anulados += monto;
+                }
+            });
+
+            resumenBruto.textContent = numberFormat.format(bruto);
+            resumenAnulados.textContent = numberFormat.format(anulados);
+            resumenNeto.textContent = numberFormat.format(bruto - anulados);
+            resumenRecibos.textContent = facturas.length.toString();
         }
 
         function crearFila(factura) {
@@ -110,12 +174,15 @@
                 const fila = document.createElement('tr');
                 fila.innerHTML = `<td colspan="10" class="text-center py-4">No hay pagos registrados para este contribuyente.</td>`;
                 tablaPagos.appendChild(fila);
+                setResumen([]);
                 return;
             }
 
             facturas.forEach((factura) => {
                 tablaPagos.appendChild(crearFila(factura));
             });
+
+            setResumen(facturas);
         }
 
         async function cargarPagos() {

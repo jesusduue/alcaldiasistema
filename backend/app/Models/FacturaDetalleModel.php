@@ -110,5 +110,22 @@ class FacturaDetalleModel extends Model
 
         return $this->fetchAll($sql, 's', [$fecha]);
     }
+    public function listByRange(string $desde, string $hasta): array
+    {
+        $sql = 'SELECT
+                    ti.nom_tip AS nombre_impuesto,
+                    SUM(fd.monto_det) AS total_monto
+                FROM factura_detalle fd
+                INNER JOIN factura f ON f.id_fac = fd.fky_fac
+                INNER JOIN tipo_impuesto ti ON ti.id_tip = fd.fky_tip
+                WHERE DATE(f.fec_fac) BETWEEN ? AND ?
+                  AND fd.est_registro = \'A\'
+                  AND f.est_registro = \'A\'
+                  AND f.est_pago <> \'N\'
+                GROUP BY ti.nom_tip
+                ORDER BY ti.nom_tip ASC';
+
+        return $this->fetchAll($sql, 'ss', [$desde, $hasta]);
+    }
 }
 
