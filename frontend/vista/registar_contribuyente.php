@@ -20,7 +20,13 @@
 			<div class="collapse navbar-collapse justify-content-end" id="mainNav">
 				<ul class="navbar-nav align-items-lg-center gap-lg-3">
 					<li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-					<li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
+                            <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
+                        </ul>
+                    </li>
 					<li class="nav-item"><a class="nav-link active" href="registar_contribuyente.php">Registrar contribuyente</a></li>
 					<li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
 				</ul>
@@ -103,7 +109,7 @@
 	</main>
 
 	<script src="../js/apiClient.js"></script>
-	<script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			const formulario = document.getElementById('form-contribuyente');

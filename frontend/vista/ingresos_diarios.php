@@ -8,6 +8,51 @@
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
+    <style>
+        @media print {
+        /* Reglas normales de impresión */
+        .oculto-impresion {
+            display: none !important;
+        }
+
+        /* Reglas ESPECÍFICAS para el modo detalle */
+        body.print-mode-detail {
+            background-color: white;
+            height: 100%;
+            overflow: hidden; /* Evita scrollbars */
+        }
+
+        /* Ocultar todo por defecto en este modo */
+        body.print-mode-detail * {
+            visibility: hidden;
+        }
+
+        /* Hacer visible SOLO el contenedor de detalle y sus hijos */
+        body.print-mode-detail #detalle-container,
+        body.print-mode-detail #detalle-container * {
+            visibility: visible;
+        }
+
+        /* Posicionar el contenedor al inicio absoluto de la página */
+        body.print-mode-detail #detalle-container {
+            position: fixed; /* Fixed asegura que se pegue al papel */
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin: 0 !important;
+            padding: 20px !important; /* Un poco de margen interno para que no corte texto */
+            border: none !important;
+            box-shadow: none !important;
+            z-index: 9999; /* Asegurar que quede encima de todo */
+            background-color: white;
+        }
+
+        /* Ocultar el botón de imprimir dentro del reporte */
+        body.print-mode-detail #btn-imprimir-detalle {
+            display: none !important;
+        }
+    }
+    </style>
 </head>
 
 <body>
@@ -22,7 +67,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
                 <ul class="navbar-nav align-items-lg-center gap-lg-3">
                     <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
+                            <li><a class="dropdown-item active" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
                     <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
                 </ul>
@@ -93,13 +144,16 @@
             <div id="tabla-diaria" class="table-responsive app-table"></div>
         </section>
 
-        <section class="app-card">
+        <section class="app-card" id="detalle-container">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-3">
                 <div>
-                    <h2 class="h5 mb-1">Detalle por rubros</h2>
+                    <h2 class="h5 mb-1" id="titulo-detalle">Detalle por rubros</h2>
                     <p class="app-subtitle mb-0 oculto-impresion">Suma de ingresos por impuesto para la fecha seleccionada.</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-app-outline" type="button" id="btn-imprimir-detalle">
+                        <i class="bi bi-printer me-1"></i>Imprimir detalle
+                    </button>
                     <span class="text-muted small text-uppercase">Fecha:</span>
                     <span class="badge bg-secondary" id="rubro-fecha-label">-</span>
                 </div>
@@ -109,7 +163,7 @@
     </main>
 
     <script src="../js/apiClient.js"></script>
-    <script src="../bootstrap-5.3.1-dist/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/ingresos_diarios.js"></script>
 </body>
 

@@ -127,6 +127,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
     <script>

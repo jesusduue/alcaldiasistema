@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tablaDiaria = document.getElementById('tabla-diaria');
     const tablaRubros = document.getElementById('tabla-rubros');
+    const tituloDetalle = document.getElementById('titulo-detalle');
     const rubroFechaLabel = document.getElementById('rubro-fecha-label');
     const resumenBruto = document.getElementById('resumen-bruto');
     const resumenAnulados = document.getElementById('resumen-anulados');
@@ -12,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnHoy = document.getElementById('btn-hoy');
 
     let facturas = [];
-    let fechaRubrosSeleccionada = '';
+    let fechaSeleccionada = '';
+    let modoVisualizacion = 'rubros'; // 'rubros' | 'pagos'
 
     const numberFormat = new Intl.NumberFormat('es-VE', {
         minimumFractionDigits: 2,
@@ -25,10 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setHoy() {
-            const hoy = new Date();
-            const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-            const dia = String(hoy.getDate()).padStart(2, '0');
-            const hoyStr = `${hoy.getFullYear()}-${mes}-${dia}`;
+        const hoy = new Date();
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        const hoyStr = `${hoy.getFullYear()}-${mes}-${dia}`;
         inputDesde.value = hoyStr;
         inputHasta.value = hoyStr;
     }
@@ -139,9 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
                     <th>Fecha</th>
                     <th class="text-center">Recibos</th>
-                    <th class="text-end">Monto bruto</th>
+                    <th class="text-end">Sub total</th>
                     <th class="text-end">Anulados</th>
-                    <th class="text-end">Total neto</th>
+                    <th class="text-end">Total</th>
                     <th class="text-center oculto-impresion">Rubros</th>
                 </tr>
             </thead>
@@ -157,9 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-end text-danger">${formatoMonto(item.anulados)}</td>
                 <td class="text-end fw-semibold">${formatoMonto(item.neto)}</td>
                 <td class="text-center oculto-impresion">
-                    <button class="btn btn-sm btn-app-outline" data-fecha-rubro="${item.fecha}">
-                        Ver rubros
-                    </button>
+                    <div class="d-flex gap-1 justify-content-center">
+                        <button class="btn btn-sm btn-app-outline" data-accion="ver-rubros" data-fecha="${item.fecha}">
+                            Ver rubros
+                        </button>
+                        <button class="btn btn-sm btn-app-outline" data-accion="ver-pagos" data-fecha="${item.fecha}">
+                            Ver pagos
+                        </button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(fila);
@@ -171,12 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTablaRubros(rubros) {
-        if (!fechaRubrosSeleccionada) {
+        if (!fechaSeleccionada) {
             tablaRubros.innerHTML = '<p class="text-center py-4 text-muted mb-0">Selecciona una fecha de la tabla superior para ver los rubros.</p>';
             return;
         }
         if (!rubros.length) {
-            tablaRubros.innerHTML = `<p class="text-center py-4 text-muted mb-0">No hay rubros registrados para ${fechaRubrosSeleccionada}.</p>`;
+            tablaRubros.innerHTML = `<p class="text-center py-4 text-muted mb-0">No hay rubros registrados para ${fechaSeleccionada}.</p>`;
             return;
         }
 
@@ -217,9 +224,91 @@ document.addEventListener('DOMContentLoaded', () => {
         tablaRubros.appendChild(tabla);
     }
 
+    function renderTablaPagos(listaPagos) {
+        if (!fechaSeleccionada) {
+            tablaRubros.innerHTML = '<p class="text-center py-4 text-muted mb-0">Selecciona una fecha de la tabla superior para ver los pagos.</p>';
+            return;
+        }
+        if (!listaPagos.length) {
+            tablaRubros.innerHTML = `<p class="text-center py-4 text-muted mb-0">No hay pagos registrados para ${fechaSeleccionada}.</p>`;
+            return;
+        }
+
+        const tabla = document.createElement('table');
+        tabla.className = 'table table-hover align-middle mb-0';
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>N° Factura</th>
+                    <th>Fecha</th>
+                    <th>Cédula/RIF</th>
+                    <th>Razón Social</th>
+                    <th>Concepto</th>
+                    <th class="text-end">Monto</th>
+                    <th class="text-center">Estado</th>
+                </tr>
+            </thead>
+        `;
+
+        const tbody = document.createElement('tbody');
+        let totalSum = 0;
+        let anuladosSum = 0;
+
+        listaPagos.forEach((pago) => {
+            const monto = parseFloat(pago.total_factura ?? 0);
+            if (!Number.isNaN(monto)) {
+                totalSum += monto;
+                if (esAnulada(pago)) {
+                    anuladosSum += monto;
+                }
+            }
+
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${pago.num_factura}</td>
+                <td>${pago.fecha}</td>
+                <td>${pago.cedula_rif}</td>
+                <td>${pago.razon_social}</td>
+                <td>${pago.concepto ?? ''}</td>
+                <td class="text-end">${formatoMonto(monto)}</td>
+                <td class="text-center">${pago.ESTADO_FACT ?? ''}</td>
+            `;
+            tbody.appendChild(fila);
+        });
+
+        const totalFinal = totalSum - anuladosSum;
+
+        const tfoot = document.createElement('tfoot');
+        tfoot.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Sub-total:</td>
+                <td class="text-end">${formatoMonto(totalSum)}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Total recibos anulados:</td>
+                <td class="text-end text-danger">${formatoMonto(anuladosSum)}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-end fw-semibold text-uppercase">Total general:</td>
+                <td class="text-end fw-semibold">${formatoMonto(totalFinal)}</td>
+                <td></td>
+            </tr>
+        `;
+        tabla.appendChild(tbody);
+        tabla.appendChild(tfoot);
+
+        tablaRubros.innerHTML = '';
+        tablaRubros.appendChild(tabla);
+    }
+
     async function cargarRubros(fecha) {
-        fechaRubrosSeleccionada = fecha;
+        fechaSeleccionada = fecha;
+        modoVisualizacion = 'rubros';
         rubroFechaLabel.textContent = fecha || '-';
+        tituloDetalle.textContent = 'Detalle por rubros';
+
         if (!fecha) {
             renderTablaRubros([]);
             return;
@@ -233,6 +322,28 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTablaRubros(respuesta?.data ?? []);
         } catch (error) {
             tablaRubros.innerHTML = `<p class="text-center text-danger py-4 mb-0">${error.message || 'No fue posible cargar los rubros.'}</p>`;
+        }
+    }
+
+    async function cargarPagos(fecha) {
+        fechaSeleccionada = fecha;
+        modoVisualizacion = 'pagos';
+        rubroFechaLabel.textContent = fecha || '-';
+        tituloDetalle.textContent = 'Detalle de pagos';
+
+        if (!fecha) {
+            renderTablaPagos([]);
+            return;
+        }
+
+        tablaRubros.innerHTML = '<p class="text-center py-4 text-muted mb-0">Cargando pagos...</p>';
+        try {
+            const respuesta = await apiRequest('facturas', 'by_fecha', {
+                params: { fecha },
+            });
+            renderTablaPagos(respuesta?.data ?? []);
+        } catch (error) {
+            tablaRubros.innerHTML = `<p class="text-center text-danger py-4 mb-0">${error.message || 'No fue posible cargar los pagos.'}</p>`;
         }
     }
 
@@ -263,12 +374,16 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTablaDiaria(agrupados);
 
         const fechaDestino = agrupados.length
-            ? (agrupados.some((item) => item.fecha === fechaRubrosSeleccionada)
-                ? fechaRubrosSeleccionada
+            ? (agrupados.some((item) => item.fecha === fechaSeleccionada)
+                ? fechaSeleccionada
                 : agrupados[agrupados.length - 1].fecha)
             : '';
 
-        cargarRubros(fechaDestino);
+        if (modoVisualizacion === 'pagos') {
+            cargarPagos(fechaDestino);
+        } else {
+            cargarRubros(fechaDestino);
+        }
     }
 
     async function cargarFacturas() {
@@ -289,18 +404,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     tablaDiaria.addEventListener('click', (evento) => {
-        const boton = evento.target.closest('[data-fecha-rubro]');
+        const boton = evento.target.closest('button[data-fecha]');
         if (!boton) {
             return;
         }
-        const fecha = boton.getAttribute('data-fecha-rubro');
-        cargarRubros(fecha);
+        const fecha = boton.getAttribute('data-fecha');
+        const accion = boton.getAttribute('data-accion');
+
+        if (accion === 'ver-rubros') {
+            cargarRubros(fecha);
+        } else if (accion === 'ver-pagos') {
+            cargarPagos(fecha);
+        }
     });
 
     btnHoy.addEventListener('click', () => {
         setHoy();
         aplicarFiltros();
     });
+
+    const btnImprimirDetalle = document.getElementById('btn-imprimir-detalle');
+    
+    if (btnImprimirDetalle) {
+        btnImprimirDetalle.addEventListener('click', () => {
+            // 1. Agregamos la clase para ocultar lo demás
+            document.body.classList.add('print-mode-detail');
+            
+            // 2. Pequeño hack para dar tiempo al navegador a repintar el CSS antes de imprimir
+            setTimeout(() => {
+                window.print();
+            }, 50);
+        });
+
+        // 3. Cuando termine de imprimir (o cancele), quitamos la clase
+        window.addEventListener('afterprint', () => {
+            document.body.classList.remove('print-mode-detail');
+        });
+    }
 
     setHoy();
     cargarFacturas();

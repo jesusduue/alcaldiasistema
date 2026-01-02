@@ -70,7 +70,6 @@
         .info-chip .label {
             font-size: 1rem;
             color: var(--color-text-head);
-            text-transform: uppercase;
         }
 
         .info-chip .value {
@@ -93,8 +92,20 @@
             margin-bottom: 1px;
         }
 
+        .codigo {
+            width: 35px;
+        }
+
+        .cedula {
+            width: 100px;
+        }
+
+        .nombre {
+            width: 350px;
+        }
+
         #concepto {
-            width: 100%;
+            width: 85%;
             border: none;
             background: transparent;
         }
@@ -135,7 +146,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
                 <ul class="navbar-nav align-items-lg-center gap-lg-3">
                     <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
+                            <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
                     <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
                     <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
@@ -177,13 +194,14 @@
                             Comprobante de Pago
                             <input type="text" class="form-control-plaintext p-0 fw-semibold text-end text-muted"
                                 id="num_factura" aria-label="Número de factura" readonly placeholder="N° Control">
-                            <input type="date" class="form-control-plaintext p-0 fw-semibold text-end text-muted" id="fecha"
-                                name="fecha" required aria-label="Fecha de emisión">
+                            <input type="text" class="form-control-plaintext p-0 fw-semibold text-end text-muted" id="fecha"
+                                name="fecha" required aria-label="Fecha de emisión" readonly>
                         </div>
                     </div>
                 </div>
 
                 <input type="hidden" name="id_usuario" value="1">
+                <input type="hidden" name="ESTADO_FACT" value="NULO">
 
                 <div class="info-compact info-compact-row mb-3 form">
                     <div class="info-chip">
@@ -204,16 +222,42 @@
                 <div class="info-compact mb-3">
                     <div class="w-100">
                         <span class="label">Descripción</span>
-                        <input type="text" class="value" name="concepto" id="concepto" aria-label="Descripción o concepto">
+                        <input type="text" class="value" name="concepto" id="concepto" aria-label="Descripción o concepto" readonly>
                         <div class="info-line"></div>
                     </div>
                 </div>
 
-                <div class="info-compact mb-3">
-                    <div class="info-chip">
-                        <span class="label">Estado del recibo:</span>
-                        <input type="text" class="value" name="ESTADO_FACT" id="ESTADO_FACT" value="NULO"
-                            aria-label="Estado de la factura (ej: NULO)">
+                <!-- Detalle de Impuestos -->
+                <div class="factura-detalle">
+                    <div class="factura-detalle-header">
+                        <div>Concepto / Clasificador</div>
+                        <div class="text-end">Monto (Bs)</div>
+                    </div>
+
+                    <!-- Items A-F -->
+                    <div class="factura-item" id="row-A">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorA" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_A" readonly>
+                    </div>
+                    <div class="factura-item" id="row-B">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorB" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_B" readonly>
+                    </div>
+                    <div class="factura-item" id="row-C">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorC" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_C" readonly>
+                    </div>
+                    <div class="factura-item" id="row-D">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorD" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_D" readonly>
+                    </div>
+                    <div class="factura-item" id="row-E">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorE" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_E" readonly>
+                    </div>
+                    <div class="factura-item" id="row-F">
+                        <input type="text" class="form-control-plaintext p-0" id="clasificadorF" readonly>
+                        <input type="text" class="form-control-plaintext p-0 text-end" id="monto_impuesto_F" readonly>
                     </div>
                 </div>
 
@@ -234,6 +278,7 @@
         const mensaje = document.getElementById('mensaje');
         const params = new URLSearchParams(window.location.search);
         const numFactura = params.get('num_factura');
+        let clasificadores = [];
 
         function mostrarMensaje(tipo, texto) {
             mensaje.className = `alert alert-${tipo} oculto-impresion`;
@@ -244,6 +289,21 @@
         function limpiarMensaje() {
             mensaje.classList.add('d-none');
             mensaje.textContent = '';
+        }
+
+        async function cargarClasificadores() {
+            try {
+                const respuesta = await apiRequest('clasificadores', 'list');
+                clasificadores = respuesta?.data ?? [];
+            } catch (error) {
+                console.error('Error al cargar clasificadores:', error);
+            }
+        }
+
+        function obtenerNombreClasificador(id) {
+            if (!id) return '';
+            const encontrado = clasificadores.find(c => c.id_clasificador == id);
+            return encontrado ? encontrado.nombre : id;
         }
 
         async function cargarFactura() {
@@ -264,13 +324,35 @@
                 }
 
                 document.getElementById('fecha').value = factura.fecha;
-                document.getElementById('num_factura').value = factura.num_factura;
+                const numeroControl = factura.numero_control ?? factura.num_factura;
+                document.getElementById('num_factura').value = numeroControl ?? '';
                 document.getElementById('cod_contribuyente').value = String(factura.cod_contribuyente || '').padStart(4, '0');
                 document.getElementById('cedula_rif').value = factura.cedula_rif;
                 document.getElementById('razon_social').value = factura.razon_social;
                 document.getElementById('concepto').value = factura.concepto ?? '';
                 document.getElementById('total_factura').value = (factura.total_factura ?? 0).toFixed(2);
-                document.getElementById('ESTADO_FACT').value = factura.ESTADO_FACT ?? 'NULO';
+
+                // Cargar impuestos
+                const letras = ['A', 'B', 'C', 'D', 'E', 'F'];
+                letras.forEach(letra => {
+                    const monto = factura[`monto_impuesto_${letra}`];
+                    const clasificadorInput = document.getElementById(`clasificador${letra}`);
+                    const montoInput = document.getElementById(`monto_impuesto_${letra}`);
+                    const row = document.getElementById(`row-${letra}`);
+
+                    if (monto && parseFloat(monto) > 0) {
+                        montoInput.value = monto;
+                        const idClasificador = factura[`impuesto_${letra}`] || factura[`id_clasificador${letra}`];
+                        const nombreClasificador = factura[`nombre_impuesto_${letra}`] || obtenerNombreClasificador(idClasificador);
+                        clasificadorInput.value = nombreClasificador;
+                        row.style.display = 'grid'; // Mostrar fila si tiene datos
+                    } else {
+                        montoInput.value = '';
+                        clasificadorInput.value = '';
+                        row.style.display = 'none'; // Ocultar fila vacía
+                    }
+                });
+
             } catch (error) {
                 mostrarMensaje('danger', error.message || 'No fue posible obtener la factura.');
                 form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
@@ -293,7 +375,7 @@
                 cod_contribuyente: document.getElementById('cod_contribuyente').value,
                 concepto: document.getElementById('concepto').value,
                 total_factura: document.getElementById('total_factura').value,
-                ESTADO_FACT: document.getElementById('ESTADO_FACT').value,
+                ESTADO_FACT: 'NULO',
             };
 
             try {
@@ -319,7 +401,8 @@
                 form.querySelectorAll('input, button').forEach((elemento) => elemento.disabled = true);
                 return;
             }
-            cargarFactura();
+            await cargarClasificadores();
+            await cargarFactura();
         });
     </script>
 </body>

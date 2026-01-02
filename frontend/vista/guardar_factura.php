@@ -142,7 +142,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
                 <ul class="navbar-nav align-items-lg-center gap-lg-3">
                     <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
+                            <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
                     <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar
                             contribuyente</a></li>
