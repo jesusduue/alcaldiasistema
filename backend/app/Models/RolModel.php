@@ -9,12 +9,16 @@ use App\Core\Model;
  */
 class RolModel extends Model
 {
-    public function all(): array
+    public function all(bool $includeInactive = false): array
     {
         $sql = 'SELECT id_rol, nom_rol, est_registro
-                FROM rol
-                WHERE est_registro <> \'I\'
-                ORDER BY nom_rol ASC';
+                FROM rol';
+
+        if (!$includeInactive) {
+            $sql .= ' WHERE est_registro <> \'I\'';
+        }
+
+        $sql .= ' ORDER BY nom_rol ASC';
 
         return $this->fetchAll($sql);
     }
@@ -36,4 +40,3 @@ class RolModel extends Model
         return $this->execute($sql, 'ssi', [$nombre, $estado, $idRol]);
     }
 }
-

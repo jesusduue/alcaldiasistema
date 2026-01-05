@@ -18,8 +18,8 @@ class UsuarioView
             'id_usuario' => isset($row['id_usu']) ? (int) $row['id_usu'] : (int) ($row['id_usuario'] ?? 0),
             'nombre' => $row['nom_usu'] ?? $row['nombre'] ?? '',
             'rol' => isset($row['fky_rol']) ? (int) $row['fky_rol'] : (int) ($row['rol'] ?? 0),
+            'rol_nombre' => $row['nom_rol'] ?? $row['rol_nombre'] ?? '',
             'estado' => strtoupper($row['est_registro'] ?? $row['estado'] ?? 'A'),
         ];
     }
 }
-

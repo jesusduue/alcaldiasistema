@@ -9,7 +9,7 @@ use App\Core\Model;
  */
 class UsuarioModel extends Model
 {
-    public function list(): array
+    public function list(bool $includeInactive = false): array
     {
         $sql = 'SELECT
                     u.id_usu,
@@ -18,8 +18,11 @@ class UsuarioModel extends Model
                     u.est_registro,
                     r.nom_rol
                 FROM usuario u
-                INNER JOIN rol r ON r.id_rol = u.fky_rol
-                WHERE u.est_registro <> \'I\'';
+                INNER JOIN rol r ON r.id_rol = u.fky_rol';
+
+        if (!$includeInactive) {
+            $sql .= ' WHERE u.est_registro <> \'I\'';
+        }
 
         return $this->fetchAll($sql);
     }
@@ -102,9 +105,32 @@ class UsuarioModel extends Model
         return $this->fetchOne($sql, $types, $params);
     }
 
+    public function findByNombreWithRol(string $nombre): ?array
+    {
+        $sql = 'SELECT
+                    u.id_usu,
+                    u.nom_usu,
+                    u.cla_usu,
+                    u.fky_rol,
+                    u.est_registro,
+                    r.nom_rol
+                FROM usuario u
+                INNER JOIN rol r ON r.id_rol = u.fky_rol
+                WHERE u.nom_usu = ?
+                LIMIT 1';
+
+        return $this->fetchOne($sql, 's', [$nombre]);
+    }
+
+    public function updatePassword(int $idUsuario, string $plain): bool
+    {
+        $sql = 'UPDATE usuario SET cla_usu = ? WHERE id_usu = ?';
+
+        return $this->execute($sql, 'si', [$this->hashPassword($plain), $idUsuario]);
+    }
+
     private function hashPassword(string $plain): string
     {
         return password_hash($plain, PASSWORD_BCRYPT);
     }
 }
-

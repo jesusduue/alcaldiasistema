@@ -1,3 +1,7 @@
+<?php
+
+require_once __DIR__ . '/partials/session_guard.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,32 +13,7 @@
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-   <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
-             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
-                <img src="../logo.png" alt="Logo">
-                Alcaldia Sistema
-            </a>
-            <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="index.html">
-        
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
-                        <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
-                            <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
-                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php require_once __DIR__ . '/partials/nav.php'; ?>
 
     <main class="container py-5">
         <header class="app-card mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">

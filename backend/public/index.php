@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../autoload.php';
 
 use App\Controllers\ActividadController;
+use App\Controllers\AuthController;
 use App\Controllers\ClasificadorController;
 use App\Controllers\ContribuyenteController;
 use App\Controllers\DetalleReciboController;
@@ -11,12 +12,20 @@ use App\Controllers\RolController;
 use App\Controllers\SystemController;
 use App\Controllers\UsuarioController;
 use App\Core\Response;
+use App\Support\Auth;
 
 $entity = $_GET['entity'] ?? '';
 $action = $_GET['action'] ?? '';
 $method = strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
 
+Auth::start();
+
 $routes = [
+    'auth' => [
+        'login' => ['controller' => AuthController::class, 'method' => 'login', 'http' => ['post']],
+        'logout' => ['controller' => AuthController::class, 'method' => 'logout', 'http' => ['get', 'post']],
+        'me' => ['controller' => AuthController::class, 'method' => 'me', 'http' => ['get']],
+    ],
     'contribuyentes' => [
         'list' => ['controller' => ContribuyenteController::class, 'method' => 'index', 'http' => ['get']],
         'store' => ['controller' => ContribuyenteController::class, 'method' => 'store', 'http' => ['post']],
@@ -71,6 +80,14 @@ if (!isset($routes[$entity][$action])) {
 }
 
 $route = $routes[$entity][$action];
+
+if ($entity !== 'auth' || !in_array($action, ['login', 'logout'], true)) {
+    if (in_array($entity, ['usuarios', 'roles', 'actividades'], true)) {
+        Auth::requireAdmin();
+    } else {
+        Auth::requireLogin();
+    }
+}
 
 if (!in_array($method, $route['http'], true)) {
     Response::error('Método HTTP no permitido.', 405);

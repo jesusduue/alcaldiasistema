@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Validator;
+use App\Models\LogActividadModel;
 use App\Models\UsuarioModel;
+use App\Support\Auth;
 use App\Views\UsuarioView;
 use InvalidArgumentException;
 use mysqli_sql_exception;
@@ -12,17 +14,23 @@ use mysqli_sql_exception;
 class UsuarioController extends Controller
 {
     private UsuarioModel $usuarios;
+    private LogActividadModel $logs;
 
     public function __construct()
     {
         parent::__construct();
         $this->usuarios = new UsuarioModel();
+        $this->logs = new LogActividadModel();
     }
 
     /** Lista los usuarios registrados. */
     public function index(): void
     {
-        $items = $this->usuarios->list();
+        $includeInactive = filter_var(
+            $this->input('include_inactive') ?? $this->input('include_inactivos'),
+            FILTER_VALIDATE_BOOLEAN
+        );
+        $items = $this->usuarios->list($includeInactive);
 
         $this->json([
             'success' => true,
@@ -41,6 +49,12 @@ class UsuarioController extends Controller
             }
 
             $id = $this->usuarios->create($payload);
+
+            $this->recordLog('CREAR', 'Registro de usuario', $id, [
+                'usuario' => $payload['nom_usu'],
+                'rol_id' => $payload['fky_rol'],
+                'estado' => $payload['est_registro'],
+            ]);
 
             $this->json([
                 'success' => true,
@@ -72,6 +86,13 @@ class UsuarioController extends Controller
                 return;
             }
 
+            $accion = $payload['est_registro'] === 'I' ? 'DESHABILITAR' : 'ACTUALIZAR';
+            $this->recordLog($accion, 'Actualizacion de usuario', $idUsuario, [
+                'usuario' => $payload['nom_usu'],
+                'rol_id' => $payload['fky_rol'],
+                'estado' => $payload['est_registro'],
+            ]);
+
             $this->json([
                 'success' => true,
                 'message' => 'Usuario actualizado correctamente.',
@@ -101,5 +122,27 @@ class UsuarioController extends Controller
         }
 
         return $payload;
+    }
+
+    private function recordLog(string $accion, string $detalle, int $usuarioId, array $metadata = []): void
+    {
+        $current = Auth::user();
+
+        if (!$current) {
+            return;
+        }
+
+        $this->logs->record([
+            'fky_usu' => (int) $current['id'],
+            'nom_usu' => (string) $current['nombre'],
+            'modulo' => 'Usuarios',
+            'accion' => $accion,
+            'detalle' => $detalle,
+            'entidad_tipo' => 'usuario',
+            'entidad_id' => $usuarioId,
+            'metadata' => json_encode($metadata, JSON_UNESCAPED_UNICODE),
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'cli',
+        ]);
     }
 }

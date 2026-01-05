@@ -1,3 +1,7 @@
+<?php
+
+require_once __DIR__ . '/partials/session_guard.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -129,27 +133,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3 oculto-impresion">
-        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="index.html">
-            <img src="../logo.png" alt="Logo">
-            Alcaldia Sistema
-        </a>
-        <div class="container">
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
-                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar
-                            contribuyente</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php require_once __DIR__ . '/partials/nav.php'; ?>
 
     <!-- Botones flotantes (ocultos en impresion) -->
     <div class="floating-action floating-left oculto-impresion">
@@ -158,7 +142,7 @@
         </button>
     </div>
     <div class="floating-action floating-right oculto-impresion">
-        <a href="index.html" class="btn btn-app-outline">Volver</a>
+        <a href="index.php" class="btn btn-app-outline">Volver</a>
     </div>
 
     <div class="container py-5">
@@ -194,7 +178,7 @@
                 </div>
 
                 <input type="hidden" name="cod_contribuyente" id="cod_contribuyente_hidden">
-                <input type="hidden" name="id_usuario" value="1">
+                <input type="hidden" name="id_usuario" value="<?php echo (int) $currentUser['id']; ?>">
 
                 <!-- Información Principal compacta -->
                 <div class="info-compact info-compact-row mb-3 form">

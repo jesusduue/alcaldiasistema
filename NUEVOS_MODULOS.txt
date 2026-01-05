@@ -1,0 +1,29 @@
+Nuevos modulos y cambios principales
+
+1) Inicio de sesion
+- Vista: frontend/vista/login.php
+- JS: frontend/js/login.js
+- Backend: backend/app/Controllers/AuthController.php, backend/app/Support/Auth.php
+- Flujo: el usuario ingresa usuario y clave, se valida contra la tabla usuario, se crea la sesion y se redirige al panel.
+- Seguridad: la clave se guarda con password_hash (bcrypt). En login se valida con password_verify y se rehashea si hace falta.
+
+2) Gestion de usuarios y roles (solo administrador)
+- Vista: frontend/vista/usuarios.php
+- JS: frontend/js/usuarios.js
+- Backend: backend/app/Controllers/UsuarioController.php, backend/app/Controllers/RolController.php
+- Funciones: listar usuarios, registrar/editar, habilitar o deshabilitar usuarios y roles.
+- Control de acceso: solo el rol "Administrador"/"Admin" puede acceder (guardado en backend/public/index.php y en session_admin_guard.php).
+
+3) Auditoria y logs de acciones
+- Vista: frontend/vista/usuarios.php (seccion Actividad reciente)
+- Backend: backend/app/Controllers/ActividadController.php, backend/app/Models/LogActividadModel.php
+- Se registran eventos de login/logout, alta/baja de usuarios/roles y operaciones existentes (facturas, contribuyentes).
+
+4) Sesiones y proteccion de vistas
+- Guardas: frontend/vista/partials/session_guard.php y session_admin_guard.php.
+- Navbar unificada: frontend/vista/partials/nav.php con cierre de sesion.
+- API protegida por sesion: backend/public/index.php exige login para todas las rutas excepto auth/login y auth/logout.
+
+Notas
+- El rol administrador se determina por el nombre de rol (Administrador/Admin).
+- Para crear el primer administrador, asegure un rol con ese nombre y un usuario activo asociado en la base de datos.

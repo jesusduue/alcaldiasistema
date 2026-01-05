@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Core\Validator;
 use App\Models\ContribuyenteModel;
 use App\Models\LogActividadModel;
+use App\Support\Auth;
 use App\Views\ContribuyenteView;
 use InvalidArgumentException;
 use mysqli_sql_exception;
@@ -136,11 +137,21 @@ class ContribuyenteController extends Controller
 
     private function resolveUsuarioId(): int
     {
+        $sessionId = Auth::id();
+        if ($sessionId !== null) {
+            return $sessionId;
+        }
+
         return (int) ($this->input('usuario_registro') ?? $this->input('id_usuario') ?? 1);
     }
 
     private function resolveUsuarioNombre(): string
     {
+        $sessionName = Auth::name();
+        if ($sessionName !== 'sistema') {
+            return $sessionName;
+        }
+
         return Validator::optionalString($this->input('usuario_nombre')) ?? 'sistema';
     }
 

@@ -8,6 +8,7 @@ use App\Core\Validator;
 use App\Models\FacturaModel;
 use App\Models\LogActividadModel;
 use App\Support\LicenseGuard;
+use App\Support\Auth;
 use App\Views\FacturaView;
 use InvalidArgumentException;
 use mysqli_sql_exception;
@@ -418,11 +419,21 @@ class FacturaController extends Controller
 
     private function resolveUsuarioId(array $payload = []): int
     {
+        $sessionId = Auth::id();
+        if ($sessionId !== null) {
+            return $sessionId;
+        }
+
         return (int) ($payload['id_usuario'] ?? $payload['usuario_registro'] ?? $this->input('id_usuario') ?? 1);
     }
 
     private function resolveUsuarioNombre(array $payload = []): string
     {
+        $sessionName = Auth::name();
+        if ($sessionName !== 'sistema') {
+            return $sessionName;
+        }
+
         return Validator::optionalString($payload['usuario_nombre'] ?? $this->input('usuario_nombre')) ?? 'sistema';
     }
 
@@ -455,4 +466,3 @@ class FacturaController extends Controller
         );
     }
 }
-

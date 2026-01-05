@@ -1,3 +1,7 @@
+<?php
+
+require_once __DIR__ . '/partials/session_guard.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
