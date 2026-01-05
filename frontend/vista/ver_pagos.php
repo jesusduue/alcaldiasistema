@@ -9,27 +9,32 @@
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3 oculto-impresion">
-             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
-                <img src="../logo.png" alt="Logo">
-                Alcaldia Sistema
-            </a>
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+            <img src="../logo.png" alt="Logo">
+            Alcaldia Sistema
+        </a>
+        <div class="container">
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link active" href="./index.html">Inicio</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
                         <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
                             <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="ingresos_rango.php">Ingresos por rango</a></li>
                             <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar
+                            contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -39,7 +44,7 @@
         <header class="app-card mb-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div>
                 <h1 class="app-section-title h3 mb-2">Pagos del contribuyente</h1>
-                <p class="app-subtitle mb-0">Consulta el historico de facturas emitidas, reimprime recibos, modifica o anula segun el estado actual.</p>
+                <p class="app-subtitle mb-0 oculto-impresion">Consulta el historico de facturas emitidas, reimprime recibos, modifica o anula segun el estado actual.</p>
             </div>
             <button class="btn btn-app-outline print-hide" type="button" onclick="window.print()">
                 <i class="bi bi-printer me-2"></i>Imprimir listado

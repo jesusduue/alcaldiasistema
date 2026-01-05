@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contenedorRubros = document.getElementById('contenedor-rubros');
     const contenedorPagos = document.getElementById('contenedor-pagos');
     const tablaPagos = document.getElementById('tabla-pagos');
+    const tablaPagosTotal = document.getElementById('tabla-pagos-total');
 
     let facturasFiltradas = [];
 
@@ -111,27 +112,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPagos() {
         tablaPagos.innerHTML = '';
+        if (tablaPagosTotal) {
+            tablaPagosTotal.innerHTML = '';
+        }
 
         if (!facturasFiltradas.length) {
             tablaPagos.innerHTML = '<tr><td colspan="5" class="text-center py-4">No hay pagos en el rango seleccionado.</td></tr>';
             return;
         }
 
+        let totalSum = 0;
+        let anuladosSum = 0;
+
         facturasFiltradas.forEach((factura) => {
             const fila = document.createElement('tr');
-            const monto = numberFormat.format(Number(factura.total_factura) || 0);
-            const estado = String(factura.ESTADO_FACT ?? factura.estado_pago ?? '').toLowerCase();
-            const estadoTexto = estado === 'nulo' || estado === 'n' ? 'Anulado' : 'Activo';
+            const montoNumero = parseFloat(factura.total_factura ?? 0);
+            if (!Number.isNaN(montoNumero)) {
+                totalSum += montoNumero;
+                if (esAnulada(factura)) {
+                    anuladosSum += montoNumero;
+                }
+            }
+            const montoTexto = numberFormat.format(Number.isNaN(montoNumero) ? 0 : montoNumero);
+            const estadoTexto = esAnulada(factura) ? 'Anulado' : 'Activo';
 
             fila.innerHTML = `
                 <td>${factura.num_factura ?? factura.numero_control ?? ''}</td>
                 <td>${(factura.fecha ?? '').slice(0, 10)}</td>
                 <td>${factura.razon_social ?? factura.cedula_rif ?? ''}</td>
-                <td class="text-end">${monto}</td>
+                <td class="text-end">${montoTexto}</td>
                 <td>${estadoTexto}</td>
             `;
             tablaPagos.appendChild(fila);
         });
+
+        if (tablaPagosTotal) {
+            const totalFinal = totalSum - anuladosSum;
+            tablaPagosTotal.innerHTML = `
+                <tr>
+                    <td colspan="3" class="text-end fw-semibold text-uppercase">Sub-total:</td>
+                    <td class="text-end">${numberFormat.format(totalSum)}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end fw-semibold text-uppercase">Total recibos anulados:</td>
+                    <td class="text-end text-danger">${numberFormat.format(anuladosSum)}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end fw-semibold text-uppercase">Total general:</td>
+                    <td class="text-end fw-semibold">${numberFormat.format(totalFinal)}</td>
+                    <td></td>
+                </tr>
+            `;
+        }
     }
 
     function mostrarRubros() {

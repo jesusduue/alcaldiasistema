@@ -56,26 +56,32 @@
 </head>
 
 <body>
-      <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3 oculto-impresion">
-             <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
-                <img src="../logo.png" alt="Logo">
-                Alcaldia Sistema
-            </a>
-            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+            <img src="../logo.png" alt="Logo">
+            Alcaldia Sistema
+        </a>
+        <div class="container">
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link active" href="./index.html">Inicio</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
                         <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
-                            <li><a class="dropdown-item active" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
+                            <li><a class="dropdown-item" href="ingresos_rango.php">Ingresos por rango</a></li>
                             <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar
+                            contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -95,7 +101,7 @@
                 </div>
             </div>
 
-            <form id="form-filtros" class="row g-3 align-items-end mb-4">
+            <form id="form-filtros" class="row g-3 align-items-end mb-4 oculto-impresion">
                 <div class="col-md-4">
                     <label for="fecha_desde" class="form-label text-uppercase text-muted small">Desde</label>
                     <input type="date" class="form-control app-input" id="fecha_desde" name="fecha_desde">

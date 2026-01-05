@@ -59,28 +59,31 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
+        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="#">
+            <img src="../logo.png" alt="Logo">
+            Alcaldia Sistema
+        </a>
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold" href="index.html">
-                <img src="../logo.png" alt="Logo">
-                Alcaldia Sistema
-            </a>
             <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-                <ul class="navbar-nav align-items-lg-center gap-lg-3">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link active" href="./index.html">Inicio</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="navReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="navReportes" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Reportes</a>
                         <ul class="dropdown-menu dropdown-menu-lg-start" aria-labelledby="navReportes">
                             <li><a class="dropdown-item" href="ingresos_diarios.php">Ingresos diarios</a></li>
-                            <li><a class="dropdown-item active" href="graficos.php">Graficos</a></li>
+                            <li><a class="dropdown-item" href="ingresos_rango.php">Ingresos por rango</a></li>
+                            <li><a class="dropdown-item" href="graficos.php">Graficos</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="relacion_diaria.php">Relaciones diarias</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar contribuyente</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_contribuyente.php">Registrar
+                            contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registar_clasificador.php">Registrar clasificador</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -233,6 +236,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/graficos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
