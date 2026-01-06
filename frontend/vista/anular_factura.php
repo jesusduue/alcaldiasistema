@@ -11,7 +11,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     <title>Anular Factura | Alcaldia</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.1/bootstrap-icons.css">
     <style>
         .floating-action {
             position: fixed;
@@ -248,7 +248,7 @@ require_once __DIR__ . '/partials/session_guard.php';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../vendor/sweetalert2/sweetalert2.min.js"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
     <script>

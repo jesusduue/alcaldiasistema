@@ -9,7 +9,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagos del contribuyente</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.3/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 <body>
@@ -79,10 +79,10 @@ require_once __DIR__ . '/partials/session_guard.php';
         </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../vendor/sweetalert2/sweetalert2.min.js"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>    
         const tablaPagos = document.getElementById('tabla-pagos');
         const estadoMensaje = document.getElementById('estado-mensaje');

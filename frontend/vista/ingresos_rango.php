@@ -10,7 +10,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ingresos por rango</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.3/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 
@@ -122,7 +122,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     </main>
 
     <script src="../js/apiClient.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/ingresos_rango.js"></script>
 </body>
 

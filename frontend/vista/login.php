@@ -17,7 +17,7 @@ if (!empty($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de sesion | Alcaldia Sistema</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.3/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
     <style>
         body.login-body {
@@ -90,7 +90,7 @@ if (!empty($_SESSION['user'])) {
             <div class="d-flex align-items-center gap-3 mb-4">
                 <img src="../logo.png" alt="Logo">
                 <div>
-                    <h1 class="h3 mb-1">Alcaldia Sistema</h1>
+                    <h1 class="h3 mb-1">Alcaldia Sistema 2026</h1>
                     <p class="login-hint mb-0">Gestion administrativa y control de ingresos municipales.</p>
                 </div>
             </div>

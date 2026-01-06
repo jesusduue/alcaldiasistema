@@ -10,7 +10,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Principal</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.3/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
 </head>
 
@@ -59,14 +59,14 @@ require_once __DIR__ . '/partials/session_guard.php';
             &copy; <span id="year"></span> Direccion de Hacienda y Municipio Garcia de Hevia
         </footer>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../vendor/sweetalert2/sweetalert2.min.js"></script>
         <script src="../js/apiClient.js"></script>
         <script src="../js/license.js"></script>
         <script src="../js/buscar_datos.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+        <script src="../bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="../vendor/jquery/jquery-3.7.0.min.js"></script>
+        <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="../vendor/datatables/dataTables.bootstrap5.min.js"></script>
         <script>
             document.getElementById('year').textContent = new Date().getFullYear();
         </script>

@@ -11,7 +11,7 @@ require_once __DIR__ . '/partials/session_guard.php';
     <title>Nueva Factura | Alcaldia</title>
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.1/bootstrap-icons.css">
     <style>
         .floating-action {
             position: fixed;
@@ -228,7 +228,7 @@ require_once __DIR__ . '/partials/session_guard.php';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../vendor/sweetalert2/sweetalert2.min.js"></script>
     <script src="../js/apiClient.js"></script>
     <script src="../js/license.js"></script>
     <script>
@@ -421,7 +421,6 @@ require_once __DIR__ . '/partials/session_guard.php';
                 });
 
                 mostrarAlerta('success', respuesta?.message || 'Factura generada correctamente.');
-                await cargarNumeroFactura();
                 
                 // Reiniciar formulario pero mantener datos básicos
                 const cod = document.getElementById('cod_contribuyente').value;
@@ -429,18 +428,35 @@ require_once __DIR__ . '/partials/session_guard.php';
                 const nom = document.getElementById('razon_social').value;
                 const idc = document.getElementById('cod_contribuyente_hidden').value;
                 
+                const resetearDespuesDeImprimir = async () => {
+                    form.reset();
+                    document.getElementById('detalles-container').innerHTML = '';
+                    agregarRenglon(); // Restaurar un renglon vacio
+                    
+                    document.getElementById('cod_contribuyente').value = cod;
+                    document.getElementById('cedula_rif').value = ced;
+                    document.getElementById('razon_social').value = nom;
+                    document.getElementById('cod_contribuyente_hidden').value = idc;
+                    document.getElementById('fecha').value = fechaActual();
+                    await cargarNumeroFactura();
+                };
+
+                const supportsAfterPrint = 'onafterprint' in window;
+                const afterPrintHandler = async () => {
+                    window.removeEventListener('afterprint', afterPrintHandler);
+                    await resetearDespuesDeImprimir();
+                };
+
+                if (supportsAfterPrint) {
+                    window.addEventListener('afterprint', afterPrintHandler);
+                }
+
                 //Para imprimir
                 window.print();
 
-                form.reset();
-                document.getElementById('detalles-container').innerHTML = '';
-                agregarRenglon(); // Restaurar un renglón vacío
-                
-                document.getElementById('cod_contribuyente').value = cod;
-                document.getElementById('cedula_rif').value = ced;
-                document.getElementById('razon_social').value = nom;
-                document.getElementById('cod_contribuyente_hidden').value = idc;
-                document.getElementById('fecha').value = fechaActual();
+                if (!supportsAfterPrint) {
+                    await resetearDespuesDeImprimir();
+                }
 
                 // Opcional: Imprimir
                
