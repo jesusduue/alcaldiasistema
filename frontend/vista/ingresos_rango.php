@@ -12,6 +12,24 @@ require_once __DIR__ . '/partials/session_guard.php';
     <link rel="stylesheet" href="../bootstrap-5.3.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../vendor/bootstrap-icons/1.11.3/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/theme.css">
+    <style>
+        @media print {
+            /* Ajustes para que las tablas se paginen completas al imprimir */
+            .app-table {
+                overflow: visible !important;
+            }
+
+            .app-table tfoot {
+                display: table-row-group;
+            }
+
+            .app-table tr {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
@@ -22,7 +40,7 @@ require_once __DIR__ . '/partials/session_guard.php';
             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start align-items-md-center mb-3">
                 <div>
                     <h1 class="h4 mb-1">Ingresos por rango</h1>
-                    <p class="app-subtitle mb-0">Totales netos, anulados y rubros sumados en el rango seleccionado. Incluye número de contribuyentes.</p>
+                    <p class="app-subtitle mb-0 oculto-impresion">Totales netos, anulados y rubros sumados en el rango seleccionado. Incluye número de contribuyentes.</p>
                 </div>
                 <div class="d-flex flex-wrap gap-2 oculto-impresion">
                     <button class="btn btn-sm btn-app-outline" type="button" onclick="window.print()">
@@ -82,7 +100,7 @@ require_once __DIR__ . '/partials/session_guard.php';
                 <button class="btn btn-sm btn-app-outline" type="button" id="btn-ver-pagos">Detalle de pagos</button>
             </div>
 
-            <div class="table-responsive app-table" id="contenedor-rubros">
+            <div class="table-responsive app-table app-table-detallePagos" id="contenedor-rubros">
                 <table class="table mb-0">
                     <thead>
                         <tr>
@@ -99,7 +117,7 @@ require_once __DIR__ . '/partials/session_guard.php';
                 </table>
             </div>
 
-            <div class="table-responsive app-table d-none" id="contenedor-pagos">
+            <div class="table-responsive app-table app-table-detallePagos" id="contenedor-pagos">
                 <table class="table mb-0">
                     <thead>
                         <tr>

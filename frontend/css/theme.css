@@ -225,7 +225,18 @@ a:hover {
   vertical-align: middle;
   border-bottom: 1px solid var(--color-border);
 }
-
+.app-table-detallePagos td {
+  padding: 0rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 11px;
+}
+.app-table-detalleRango td {
+  padding: 0rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 11px;
+}
 /* --- Estilos Específicos para Factura (Reimpresión) --- */
 .factura-container {
   background: white;

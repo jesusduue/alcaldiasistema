@@ -14,44 +14,44 @@ require_once __DIR__ . '/partials/session_guard.php';
     <link rel="stylesheet" href="../css/theme.css">
     <style>
         @media print {
-        /* Reglas normales de impresión */
+        /* Reglas basicas de impresion */
         .oculto-impresion {
             display: none !important;
         }
 
-        /* Reglas ESPECÍFICAS para el modo detalle */
+        /* Reglas especificas para el modo detalle */
         body.print-mode-detail {
             background-color: white;
-            height: 100%;
-            overflow: hidden; /* Evita scrollbars */
         }
 
-        /* Ocultar todo por defecto en este modo */
-        body.print-mode-detail * {
-            visibility: hidden;
+        body.print-mode-detail main > :not(#detalle-container) {
+            display: none !important;
         }
 
-        /* Hacer visible SOLO el contenedor de detalle y sus hijos */
-        body.print-mode-detail #detalle-container,
-        body.print-mode-detail #detalle-container * {
-            visibility: visible;
-        }
-
-        /* Posicionar el contenedor al inicio absoluto de la página */
         body.print-mode-detail #detalle-container {
-            position: fixed; /* Fixed asegura que se pegue al papel */
-            top: 0;
-            left: 0;
+            position: static;
             width: 100%;
             margin: 0 !important;
-            padding: 20px !important; /* Un poco de margen interno para que no corte texto */
+            padding: 20px !important;
             border: none !important;
             box-shadow: none !important;
-            z-index: 9999; /* Asegurar que quede encima de todo */
             background-color: white;
         }
 
-        /* Ocultar el botón de imprimir dentro del reporte */
+        body.print-mode-detail #detalle-container .table-responsive {
+            overflow: visible !important;
+        }
+
+        body.print-mode-detail #detalle-container tfoot {
+            display: table-row-group;
+        }
+
+        body.print-mode-detail #detalle-container tr {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* Ocultar el boton de imprimir dentro del reporte */
         body.print-mode-detail #btn-imprimir-detalle {
             display: none !important;
         }
@@ -139,7 +139,7 @@ require_once __DIR__ . '/partials/session_guard.php';
                     <span class="badge bg-secondary" id="rubro-fecha-label">-</span>
                 </div>
             </div>
-            <div id="tabla-rubros" class="table-responsive app-table"></div>
+            <div id="tabla-rubros" class="table-responsive app-table-detallePagos"></div>
         </section>
     </main>
 
