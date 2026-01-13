@@ -2,6 +2,8 @@
 
 $nombreUsuario = htmlspecialchars((string) ($currentUser['nombre'] ?? 'Usuario'), ENT_QUOTES, 'UTF-8');
 $rolUsuario = htmlspecialchars((string) ($currentUser['rol_nombre'] ?? ''), ENT_QUOTES, 'UTF-8');
+$rolNombre = strtoupper(trim((string) ($currentUser['rol_nombre'] ?? $currentUser['rol'] ?? '')));
+$isTreasurer = in_array($rolNombre, ['TESORERO', 'TESORERA', 'TESORERIA'], true);
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-3">
@@ -32,6 +34,9 @@ $rolUsuario = htmlspecialchars((string) ($currentUser['rol_nombre'] ?? ''), ENT_
                 </li>
                 <?php if ($isAdmin) : ?>
                     <li class="nav-item"><a class="nav-link" href="usuarios.php">Gestion de usuarios</a></li>
+                <?php endif; ?>
+                <?php if ($isAdmin || $isTreasurer) : ?>
+                    <li class="nav-item"><a class="nav-link" href="sincronizacion.php">Sincronizacion</a></li>
                 <?php endif; ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navUser" role="button"

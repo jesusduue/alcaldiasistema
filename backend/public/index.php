@@ -10,6 +10,7 @@ use App\Controllers\DetalleReciboController;
 use App\Controllers\FacturaController;
 use App\Controllers\RolController;
 use App\Controllers\SystemController;
+use App\Controllers\SyncController;
 use App\Controllers\UsuarioController;
 use App\Core\Response;
 use App\Support\Auth;
@@ -71,6 +72,11 @@ $routes = [
     ],
     'actividades' => [
         'list' => ['controller' => ActividadController::class, 'method' => 'index', 'http' => ['get']],
+    ],
+    'sync' => [
+        'export' => ['controller' => SyncController::class, 'method' => 'export', 'http' => ['get']],
+        'import' => ['controller' => SyncController::class, 'method' => 'import', 'http' => ['post']],
+        'status' => ['controller' => SyncController::class, 'method' => 'status', 'http' => ['get']],
     ],
 ];
 
